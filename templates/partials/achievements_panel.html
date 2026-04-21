@@ -1,0 +1,381 @@
+<div class="achievements-panel" id="achievementsPanel">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">🏆 Logros</h6>
+            <span class="badge bg-warning" id="achievementsCount">0/0</span>
+        </div>
+        <div class="card-body">
+            <div class="achievements-grid" id="achievementsGrid">
+                <div class="text-center text-muted py-3">
+                    <small>Sin logros desbloqueados</small>
+                </div>
+            </div>
+            <button class="btn btn-outline-light btn-sm w-100 mt-2" data-bs-toggle="modal" data-bs-target="#achievementsModal">
+                Ver Todos los Logros
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="achievementsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content" style="background: var(--bg-card); border: 1px solid var(--border-color);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+                <h5 class="modal-title" style="color: var(--text-primary);">
+                    🏆 Todos los Logros
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-4 text-center">
+                        <div class="stat-value text-warning" id="unlockedCount">0</div>
+                        <small class="text-muted">Desbloqueados</small>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="stat-value text-muted" id="lockedCount">0</div>
+                        <small class="text-muted">Bloqueados</small>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="stat-value text-primary" id="totalPoints">0</div>
+                        <small class="text-muted">Puntos</small>
+                    </div>
+                </div>
+
+                <h6 class="text-muted mb-3">Desbloqueados</h6>
+                <div class="achievements-list mb-4" id="unlockedList">
+                </div>
+
+                <h6 class="text-muted mb-3">Bloqueados</h6>
+                <div class="achievements-list" id="lockedList">
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+                <small class="text-muted">¡Desbloquea más logros para subir de nivel!</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    <div id="achievementToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="display: none;">
+        <div class="toast-header" style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+            <strong class="me-auto" style="color: var(--warning-color);" id="toastTitle">🏆 Logro!</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" style="background: var(--bg-card);" id="toastBody">
+        </div>
+    </div>
+</div>
+
+<style>
+.achievements-panel .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.achievements-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 60px;
+}
+
+.achievement-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: achievementPop 0.5s ease forwards;
+}
+
+@keyframes achievementPop {
+    0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.achievement-icon.unlocked {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.3), rgba(255, 150, 0, 0.2));
+    border: 2px solid var(--warning-color);
+    box-shadow: 0 0 15px rgba(255, 200, 0, 0.3);
+}
+
+.achievement-icon.unlocked:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 25px rgba(255, 200, 0, 0.5);
+}
+
+.achievement-icon.locked {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievement-icon.locked:hover {
+    opacity: 0.7;
+}
+
+.achievement-icon.new {
+    animation: achievementNew 0.8s ease forwards;
+}
+
+@keyframes achievementNew {
+    0% { transform: scale(0); opacity: 0; }
+    30% { transform: scale(1.3); }
+    50% { transform: scale(0.9); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.achievements-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-card);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.achievement-item:hover {
+    border-color: var(--border-color-hover);
+    transform: translateY(-2px);
+}
+
+.achievement-item.unlocked {
+    border-color: rgba(255, 200, 0, 0.3);
+}
+
+.achievement-item.locked {
+    opacity: 0.6;
+}
+
+.achievement-item-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.achievement-item.locked .achievement-item-icon {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
+
+.achievement-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.achievement-item-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.achievement-item.locked .achievement-item-name {
+    color: var(--text-muted);
+}
+
+.achievement-item-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.achievement-item-points {
+    font-size: 0.7rem;
+    color: var(--warning-color);
+    font-weight: 600;
+}
+
+.achievement-item.locked .achievement-item-points {
+    color: var(--text-muted);
+}
+
+.toast {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 200, 0, 0.5);
+    box-shadow: 0 0 30px rgba(255, 200, 0, 0.3);
+}
+
+.toast.show {
+    display: block !important;
+    animation: toastSlideIn 0.5s ease forwards;
+}
+
+@keyframes toastSlideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.progress-achievement {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.progress-achievement-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--warning-color), #ff9600);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+</style>
+
+<script>
+(function() {
+    let achievementCache = null;
+
+    function loadAchievements() {
+        fetch('/api/player/achievements')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    achievementCache = data.data;
+                    renderAchievements(data.data);
+                }
+            })
+            .catch(error => console.error('Error loading achievements:', error));
+    }
+
+    function renderAchievements(data) {
+        const grid = document.getElementById('achievementsGrid');
+        const countBadge = document.getElementById('achievementsCount');
+
+        const unlocked = data.unlocked || [];
+        const locked = data.locked || [];
+        const stats = data.stats || {};
+
+        countBadge.textContent = `${unlocked.length}/${unlocked.length + locked.length}`;
+
+        if (unlocked.length === 0) {
+            grid.innerHTML = `
+                <div class="text-center text-muted py-3" style="width: 100%;">
+                    <small>Sin logros desbloqueados</small>
+                </div>
+            `;
+        } else {
+            grid.innerHTML = unlocked.map((ach, index) => `
+                <div class="achievement-icon unlocked"
+                     data-bs-toggle="tooltip"
+                     data-bs-title="${ach.name}: ${ach.description}"
+                     style="animation-delay: ${index * 0.1}s">
+                    ${ach.icon}
+                </div>
+            `).join('');
+        }
+
+        renderModalAchievements(data);
+        initTooltips();
+    }
+
+    function renderModalAchievements(data) {
+        const unlockedList = document.getElementById('unlockedList');
+        const lockedList = document.getElementById('lockedList');
+
+        const unlocked = data.unlocked || [];
+        const locked = data.locked || [];
+        const stats = data.stats || {};
+
+        document.getElementById('unlockedCount').textContent = unlocked.length;
+        document.getElementById('lockedCount').textContent = locked.length;
+        document.getElementById('totalPoints').textContent = stats.points_earned || 0;
+
+        unlockedList.innerHTML = unlocked.map(ach => `
+            <div class="achievement-item unlocked">
+                <div class="achievement-item-icon">${ach.icon}</div>
+                <div class="achievement-item-info">
+                    <div class="achievement-item-name">${ach.name}</div>
+                    <div class="achievement-item-desc">${ach.description}</div>
+                    <div class="achievement-item-points">+${ach.puntos} pts</div>
+                </div>
+            </div>
+        `).join('');
+
+        lockedList.innerHTML = locked.map(ach => `
+            <div class="achievement-item locked">
+                <div class="achievement-item-icon">${ach.icon}</div>
+                <div class="achievement-item-info">
+                    <div class="achievement-item-name">${ach.name}</div>
+                    <div class="achievement-item-desc">${ach.description}</div>
+                    <div class="achievement-item-points">${ach.puntos} pts</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function showAchievementToast(achievement) {
+        const toast = document.getElementById('achievementToast');
+        const toastBody = document.getElementById('toastBody');
+        const toastTitle = document.getElementById('toastTitle');
+
+        toastTitle.textContent = `${achievement.icon} ${achievement.name}`;
+        toastBody.innerHTML = `
+            <div style="color: var(--text-primary);">
+                <strong>${achievement.message}</strong>
+            </div>
+            <div class="mt-2" style="color: var(--warning-color);">
+                +${achievement.puntos} puntos
+            </div>
+        `;
+
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 5000);
+    }
+
+    function checkNewAchievements() {
+        fetch('/api/player/achievements')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data.newly_unlocked) {
+                    data.data.newly_unlocked.forEach(ach => {
+                        showAchievementToast(ach);
+                    });
+                    renderAchievements(data.data);
+                }
+            })
+            .catch(error => console.error('Error checking achievements:', error));
+    }
+
+    function initTooltips() {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+
+    if (document.getElementById('achievementsPanel')) {
+        loadAchievements();
+
+        setInterval(checkNewAchievements, 10000);
+    }
+
+    window.AchievementSystem = {
+        refresh: loadAchievements,
+        checkNew: checkNewAchievements,
+        showToast: showAchievementToast
+    };
+
+})();
+</script>

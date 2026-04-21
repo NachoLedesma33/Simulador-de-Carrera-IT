@@ -368,6 +368,232 @@ def game_over():
     )
 
 
+def require_session():
+    player = load_player_from_session()
+    if not player:
+        return jsonify({'error': 'No hay partida activa', 'code': 'NO_SESSION'}), 401
+    return None
+
+
+def json_success(data=None, message='', **kwargs):
+    response = {'success': True}
+    if message:
+        response['message'] = message
+    if data is not None:
+        response['data'] = data
+    response.update(kwargs)
+    return jsonify(response)
+
+
+def json_error(message='Error', code='ERROR', status=400):
+    return jsonify({'error': message, 'code': code, 'success': False}), status
+
+
+@main_bp.route('/api/player/state')
+def api_player_state():
+    error = require_session()
+    if error:
+        return error
+
+    player = load_player_from_session()
+    player_state = player.to_dict()
+
+    player_state['_can_apply_to_next_level'] = player.can_apply_to_next_level()
+    player_state['_is_burned_out'] = player.is_burned_out()
+    player_state['_skill_gap'] = player.get_skill_gap_to_next_level()
+
+    from utils import generate_career_summary, calculate_salary_multiplier
+    career_summary = generate_career_summary(player_state)
+
+    return json_success(
+        data=player_state,
+        career=career_summary,
+        salary_multiplier=calculate_salary_multiplier(player_state)
+    )
+
+
+@main_bp.route('/api/player/achievements')
+def api_player_achievements():
+    error = require_session()
+    if error:
+        return error
+
+    player = load_player_from_session()
+    player_state = player.to_dict()
+
+    from services import create_achievement_system, check_achievements
+    ach_system = create_achievement_system()
+
+    newly_unlocked = check_achievements(player_state, ach_system)
+    unlocked = ach_system.get_unlocked_achievements()
+    locked = ach_system.get_locked_achievements()
+    stats = ach_system.get_achievement_stats()
+
+    return json_success(
+        data={
+            'unlocked': unlocked,
+            'locked': locked,
+            'stats': stats,
+            'newly_unlocked': newly_unlocked
+        }
+    )
+
+
+@main_bp.route('/api/player/save', methods=['POST'])
+def api_player_save():
+    error = require_session()
+    if error:
+        return error
+
+    player = load_player_from_session()
+    player_state = player.to_dict()
+
+    success = save_player_to_session(player)
+
+    if success:
+        return json_success(message='Partida guardada correctamente')
+    else:
+        return json_error('Error al guardar la partida', 'SAVE_ERROR')
+
+
+@main_bp.route('/api/decisions/history')
+def api_decisions_history():
+    error = require_session()
+    if error:
+        return error
+
+    player_state = get_player_state_dict() or {}
+    decisiones = player_state.get('decisiones_tomadas', [])
+
+    return json_success(
+        data={
+            'total': len(decisiones),
+            'decisions': decisiones
+        }
+    )
+
+
+@main_bp.route('/api/decisions/rollback', methods=['POST'])
+def api_decisions_rollback():
+    error = require_session()
+    if error:
+        return error
+
+    data = request.get_json() or {}
+    steps = data.get('steps', 1)
+
+    player_state = get_player_state_dict()
+    if not player_state:
+        return json_error('No hay estado para revertir', 'NO_STATE')
+
+    decisiones = player_state.get('decisiones_tomadas', [])
+
+    if len(decisiones) <= steps:
+        return json_error('No hay suficientes decisiones para revertir', 'NOT_ENOUGH_DECISIONS')
+
+    decisiones = decisiones[:-steps]
+    player_state['decisiones_tomadas'] = decisiones
+
+    from utils import sanitize_player_state
+    player_state = sanitize_player_state(player_state)
+
+    success = update_player_in_session(player_state)
+
+    if success:
+        player = load_player_from_session()
+        return json_success(
+            message=f'Se revirtieron {steps} decisión(es)',
+            data=player.to_dict()
+        )
+    else:
+        return json_error('Error al revertir', 'ROLLBACK_ERROR')
+
+
+@main_bp.route('/api/events/trigger')
+def api_events_trigger():
+    error = require_session()
+    if error:
+        return error
+
+    player_state = get_player_state_dict()
+
+    from services import create_event_system
+    event_system = create_event_system()
+
+    result = event_system.trigger_random_event(player_state)
+
+    if result:
+        update_player_in_session(player_state)
+        return json_success(
+            message=result.get('titulo', 'Evento triggered'),
+            data=result
+        )
+    else:
+        return json_success(
+            message='No hay eventos disponibles',
+            data=None
+        )
+
+
+@main_bp.route('/api/career/summary')
+def api_career_summary():
+    error = require_session()
+    if error:
+        return error
+
+    player_state = get_player_state_dict()
+
+    from utils import generate_career_summary
+    summary = generate_career_summary(player_state)
+
+    return json_success(data=summary)
+
+
+@main_bp.route('/api/career/trajectory')
+def api_career_trajectory():
+    error = require_session()
+    if error:
+        return error
+
+    player_state = get_player_state_dict()
+
+    from utils import get_career_trajectory, get_career_tips
+    trajectory = get_career_trajectory(player_state)
+    tips = get_career_tips(trajectory)
+
+    return json_success(
+        data={
+            'trajectory': trajectory,
+            'tips': tips
+        }
+    )
+
+
+@main_bp.route('/api/game/reset', methods=['POST'])
+def api_game_reset():
+    clear_session()
+    return json_success(message='Juego reiniciado')
+
+
+@main_bp.route('/api/game/seed', methods=['POST'])
+def api_game_seed():
+    data = request.get_json() or {}
+    build_type = data.get('build_type', 'full_stack')
+
+    from services.seed_data import seed_demo_game
+    try:
+        result = seed_demo_game(build_type)
+        return json_success(data=result)
+    except ValueError as e:
+        return json_error(str(e), 'INVALID_BUILD')
+
+
+@main_bp.route('/api/game/builds')
+def api_game_builds():
+    from services.seed_data import get_available_builds
+    return json_success(data=get_available_builds())
+
+
 app.register_blueprint(main_bp)
 
 
