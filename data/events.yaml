@@ -1,0 +1,248 @@
+# Eventos aleatorios del Simulador de Carrera IT
+
+eventos_aleatorios:
+  # === EVENTOS POSITIVOS ===
+  oferta_inesperada:
+    id: oferta_inesperada
+    titulo: "¡Te llega una oferta inesperada!"
+    descripcion: Una empresa tech líder te contacta con una oferta salarial un 30% superior a tu actual.
+    tipo: positivo
+    probabilidad: 0.15
+    efectos:
+      - stat: salario
+        delta: 8000
+      - stat: reputacion
+        delta: 10
+    requerimientos:
+      skill_min: 40
+    mensaje: "Tu reputación te precede. Las oportunidades llegan a quienes se destacan."
+
+  mentor_encontrado:
+    id: mentor_encontrado
+    titulo: Encuentras un mentor ideal
+    descripcion: Un senior experimentando ofrece mentorearte personalmente.
+    tipo: positivo
+    probabilidad: 0.10
+    efectos:
+      - stat: skill_level
+        delta: 20
+      - stat: estres
+        delta: -15
+      - logro: "Aprendiz de Maestro"
+    requerimientos:
+      nivel: junior
+      años_experiencia_min: 1
+    mensaje: "Un buen mentor acelera tu crecimiento exponencialmente."
+
+  certificacion_gratis:
+    id: certificacion_gratis
+    titulo: Oportunidad de certificación gratuita
+    descripcion: Tu empresa ofrece pagar una certificación profesional.
+    tipo: positivo
+    probabilidad: 0.20
+    efectos:
+      - stat: skill_level
+        delta: 10
+      - stat: reputacion
+        delta: 10
+      - stat: stack
+        add: Certified
+    requerimientos:
+      años_experiencia_min: 0.5
+    mensaje: "Las certificaciones abren puertas que no sabías que existían."
+
+  proyecto_exitoso:
+    id: proyecto_exitoso
+    titulo: Tu proyecto se vuelve viral
+    descripcion: Un side project que creaste se vuelve popular en la comunidad.
+    tipo: positivo
+    probabilidad: 0.08
+    efectos:
+      - stat: reputacion
+        delta: 25
+      - stat: skill_level
+        delta: 10
+      - logro: "Proyecto Viral"
+    requerimientos:
+      stack_min: 3
+    mensaje: "Tu trabajo habla por ti. Y a veces grita tan fuerte que todos escuchan."
+
+  bonificacion_trimestral:
+    id: bonificacion_trimestral
+    titulo: Bonificación trimestral
+    descripcion: Tu empresa entrega bonificaciones por desempeño excepcional.
+    tipo: positivo
+    probabilidad: 0.25
+    efectos:
+      - stat: salario
+        delta: 5000
+    requerimientos:
+      años_experiencia_min: 1
+    mensaje: "El esfuerzo recompensado es el mejor motivador."
+
+  # === EVENTOS NEGATIVOS ===
+  deadline_ajustado:
+    id: deadline_ajustado
+    titulo: Deadline ajustado inesperadamente
+    descripcion: El cliente cambia los requisitos a mitad del sprint.
+    tipo: negativo
+    probabilidad: 0.30
+    efectos:
+      - stat: estres
+        delta: 15
+      - stat: skill_level
+        delta: 5
+    mensaje: "Los cambios son parte del juego. Adáptate rápido."
+
+  bug_produccion:
+    id: bug_produccion
+    titulo: Bug crítico en producción
+    descripcion: Un bug被你introducido llega a producción. El equipo está bajo presión.
+    tipo: negativo
+    probabilidad: 0.20
+    efectos:
+      - stat: estres
+        delta: 20
+      - stat: reputacion
+        delta: -10
+    requerimientos:
+      años_experiencia_min: 0.5
+    mensaje: "Los errores son oportunidades de aprendizaje. No el primero que fracasa, sino el que más rápido aprende."
+
+  restructure_empresarial:
+    id: restructure_empresarial
+    titulo: Reestructuración empresarial
+    descripcion: La empresa necesita reducir costos. Tu posición está en riesgo.
+    tipo: negativo
+    probabilidad: 0.12
+    efectos:
+      - stat: estres
+        delta: 25
+      - stat: salario
+        delta: -5000
+    requerimientos:
+      nivel: trainee
+    mensaje: "La incertidumbre es natural. Prepárate para lo mejor, planifica para lo peor."
+
+  conflicto_equipo:
+    id: conflicto_equipo
+    titulo: Conflicto en el equipo
+    descripcion: Hay tensiones entre miembros del equipo. Tu mediacción es requerida.
+    tipo: negativo
+    probabilidad: 0.15
+    efectos:
+      - stat: estres
+        delta: 15
+    requerimientos:
+      años_experiencia_min: 2
+    mensaje: "El conflicto no es malo. La resolución lo es."
+
+  tecnologia_obsoleta:
+    id: tecnologia_obsoleta
+    titulo: Tu stack se vuelve obsoleto
+    descripcion: Las tecnologías que dominas están perdiendo relevancia en el mercado.
+    tipo: negativo
+    probabilidad: 0.18
+    efectos:
+      - stat: reputacion
+        delta: -15
+      - stat: skill_level
+        delta: -5
+    mensaje: "La obsolescencia es inevitable. La actualización es tu responsabilidad."
+
+  # === EVENTOS NEUTRALES ===
+  conference_invitacion:
+    id: conference_invitacion
+    titulo: Invitación a conferencia tech
+    descripcion: Te invitan a dar una talk en una conferencia local.
+    tipo: neutral
+    probabilidad: 0.10
+    efectos:
+      - stat: reputacion
+        delta: 15
+      - stat: estres
+        delta: 10
+      - stat: skill_level
+        delta: 5
+    requerimientos:
+      skill_min: 50
+      años_experiencia_min: 2
+    mensaje: "Compartir conocimiento es multiplicar conocimiento."
+
+  oferta_trabajo_copia:
+    id: oferta_trabajo_copia
+    titulo: Te hacen una copia de oferta
+    descripcion: Tu empresa iguala la oferta de otra empresa para retenerte.
+    tipo: neutral
+    probabilidad: 0.12
+    efectos:
+      - stat: salario
+        delta: 10000
+      - stat: estres
+        delta: 5
+    requerimientos:
+      skill_min: 60
+    mensaje: "Tu valor es reconocido. Pero recuerda: el dinero no es todo."
+
+  cambio_gerente:
+    id: cambio_gerente
+    titulo: Nuevo gerente arrive
+    descripcion: Tu manager cambia y tiene un estilo de liderazgo diferente.
+    tipo: neutral
+    probabilidad: 0.15
+    efectos:
+      - stat: estres
+        delta: 10
+      - stat: skill_level
+        delta: 5
+    mensaje: "Los cambios de liderazgo traen nuevas oportunidades."
+
+  reubicacion_equipo:
+    id: reubicacion_equipo
+    titulo: Tu equipo es reubicado
+    descripcion: El equipo es movido a una nueva sede o modalidad remota.
+    tipo: neutral
+    probabilidad: 0.10
+    efectos:
+      - stat: estres
+        delta: 5
+    mensaje: "El cambio es la única constante en tech."
+
+  # === EVENTOS DE RIESGO ===
+  oportunidad_startup:
+    id: oportunidad_startup
+    titulo: Oportunidad en startup
+    descripcion: Te ofrecen ser co-fundador de una startup prometedora.
+    tipo: riesgo
+    probabilidad: 0.08
+    efectos:
+      - stat: salario
+        delta: -15000
+      - stat: estres
+        delta: 30
+      - stat: skill_level
+        delta: 15
+      - stat: reputacion
+        delta: 20
+    requerimientos:
+      skill_min: 70
+      años_experiencia_min: 3
+    mensaje: "Las mayores recompensas vienen con los mayores riesgos."
+
+  oferta_extranjero:
+    id: oferta_extranjero
+    titulo: Oferta para trabajar en el extranjero
+    descripcion: Una empresa remote te ofrece trabajo para una empresa en otro país.
+    tipo: riesgo
+    probabilidad: 0.06
+    efectos:
+      - stat: salario
+        delta: 20000
+      - stat: estres
+        delta: 15
+      - stat: reputacion
+        delta: 15
+    requerimientos:
+      skill_min: 75
+      stack_min: 5
+    mensaje: "El mundo es tu playground. Las fronteras son solo mentales."

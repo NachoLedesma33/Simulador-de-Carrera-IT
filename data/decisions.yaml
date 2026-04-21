@@ -1,0 +1,564 @@
+# Arbol de decisiones del Simulador de Carrera IT
+
+# === ETAPA 0: INICIO ===
+inicio:
+  id: inicio
+  titulo: Comienza tu viaje en IT
+  descripcion: Acabas de terminar tus estudios o bootcamp. Es momento de dar el primer paso en tu carrera tecnológica.
+  tipo: inicio
+  opciones:
+    - label: Buscar mi primer empleo como trainee
+      efectos:
+        - stat: estres
+          delta: 20
+        - stat: años_experiencia
+          delta: 0.5
+      next_node: primera_entrevista
+      mensaje_extra: "El mercado está competitivo, pero tú puedes."
+      
+    - label: Hacer prácticas gratuitas para ganar experiencia
+      efectos:
+        - stat: skill_level
+          delta: 5
+        - stat: reputacion
+          delta: 5
+        - stat: años_experiencia
+          delta: 0.5
+      next_node: primera_entrevista
+      mensaje_extra: "El conocimiento vale más que el dinero ahora."
+
+# === ETAPA 1: PRIMERAS DECISIONES ===
+primera_entrevista:
+  id: primera_entrevista
+  titulo: Tu primera entrevista técnica
+  descripcion: Has conseguido una entrevista en una startup local. Te preguntan sobre tus intereses.
+  tipo: eleccion_carrera
+  requerimientos:
+    años_experiencia_min: 0.1
+  opciones:
+    - label: "Me interesa más el desarrollo frontend"
+      efectos:
+        - stat: stack
+          add: HTML
+        - stat: stack
+          add: CSS
+        - stat: stack
+          add: JavaScript
+      next_node: especializacion_frontend_1
+      requiere: null
+      
+    - label: "Prefiero el desarrollo backend"
+      efectos:
+        - stat: stack
+          add: Python
+        - stat: stack
+          add: SQL
+      next_node: especializacion_backend_1
+      requiere: null
+      
+    - label: "Me atraen los datos y analytics"
+      efectos:
+        - stat: stack
+          add: Excel
+        - stat: stack
+          add: SQL
+      next_node: especializacion_datos_1
+      requiere: null
+
+# === ESPECIALIZACIÓN FRONTEND ===
+especializacion_frontend_1:
+  id: especializacion_frontend_1
+  titulo: Dominando las bases del frontend
+  descripcion: Tu primera empresa usa React. Tienes la oportunidad de aprender un framework moderno.
+  tipo: aprender
+  opciones:
+    - label: "Invertir tiempo extra en masterizar React"
+      efectos:
+        - stat: skill_level
+          delta: 15
+        - stat: estres
+          delta: 15
+        - stat: stack
+          add: React
+        - logro: "React Ninja"
+      next_node: proyecto_portfolio_1
+      requiere: null
+      
+    - label: "Aprender lo básico y enfocarme en múltiples tecnologías"
+      efectos:
+        - stat: skill_level
+          delta: 8
+        - stat: reputacion
+          delta: 5
+        - stat: stack
+          add: Vue.js
+      next_node: proyecto_portfolio_1
+      requiere: null
+
+proyecto_portfolio_1:
+  id: proyecto_portfolio_1
+  titulo: El dilema del side project
+  descripcion: Un compañero te propone crear un proyecto open source juntos durante los fines de semana.
+  tipo: proyecto
+  opciones:
+    - label: "Aceptar y dedicar tu tiempo libre al proyecto"
+      efectos:
+        - stat: skill_level
+          delta: 10
+        - stat: estres
+          delta: 20
+        - stat: reputacion
+          delta: 10
+        - logro: "Contribuidor Open Source"
+      next_node: promo_junior
+      requiere: null
+      
+    - label: "Dedicar tiempo a descansar y mantener el balance"
+      efectos:
+        - stat: estres
+          delta: -10
+        - stat: reputacion
+          delta: -5
+      next_node: promo_junior
+      requiere: null
+
+# === ESPECIALIZACIÓN BACKEND ===
+especializacion_backend_1:
+  id: especializacion_backend_1
+  titulo: Eligiendo tu lenguaje backend
+  descripcion: Tu empresa trabaja con Python pero tienes oportunidad de aprender Go o Java.
+  tipo: aprender
+  opciones:
+    - label: "Profundizar en Python y Django/Flask"
+      efectos:
+        - stat: skill_level
+          delta: 12
+        - stat: stack
+          add: Django
+      next_node: arquitectura_1
+      requiere: null
+      
+    - label: "Aprender Java Enterprise"
+      efectos:
+        - stat: skill_level
+          delta: 10
+        - stat: stack
+          add: Java
+        - stat: reputacion
+          delta: 5
+      next_node: arquitectura_1
+      requiere: null
+
+arquitectura_1:
+  id: arquitectura_1
+  titulo: Tu primer desafío de arquitectura
+  descripcion: Te piden diseñar una API para un nuevo microservicio. Es una oportunidad de mostrar liderazgo técnico.
+  tipo: desafio
+  opciones:
+    - label: "Diseñar una arquitectura robusta con microservicios"
+      efectos:
+        - stat: skill_level
+          delta: 15
+        - stat: estres
+          delta: 20
+        - logro: "Arquitecto Novato"
+      next_node: promo_junior
+      requiere: null
+      
+    - label: "Mantenerlo simple con una arquitectura monolítica"
+      efectos:
+        - stat: skill_level
+          delta: 8
+        - stat: estres
+          delta: 5
+      next_node: promo_junior
+      requiere: null
+
+# === ESPECIALIZACIÓN DATOS ===
+especializacion_datos_1:
+  id: especializacion_datos_1
+  titulo: El mundo del análisis de datos
+  descripcion: Tu empresa necesita alguien que analice los datos de usuarios para mejorar el producto.
+  tipo: aprender
+  opciones:
+    - label: "Aprender Python para análisis de datos"
+      efectos:
+        - stat: skill_level
+          delta: 12
+        - stat: stack
+          add: Pandas
+        - stat: stack
+          add: Python
+      next_node: dashboard_1
+      requiere: null
+      
+    - label: "Enfocarse en herramientas de BI como Power BI"
+      efectos:
+        - stat: skill_level
+          delta: 10
+        - stat: stack
+          add: PowerBI
+        - stat: reputacion
+          delta: 5
+      next_node: dashboard_1
+      requiere: null
+
+dashboard_1:
+  id: dashboard_1
+  titulo: Tu primer dashboard ejecutivo
+  descripcion: Los directivos necesitan un dashboard para tomar decisiones. Es tu momento de brillar.
+  tipo: desafio
+  opciones:
+    - label: "Crear visualizaciones avanzadas con storytelling de datos"
+      efectos:
+        - stat: skill_level
+          delta: 15
+        - stat: reputacion
+          delta: 15
+        - logro: "Data Storyteller"
+      next_node: promo_junior
+      requiere: null
+      
+    - label: "Hacer un dashboard funcional pero básico"
+      efectos:
+        - stat: skill_level
+          delta: 5
+      next_node: promo_junior
+      requiere: null
+
+# === PROMOCIÓN A JUNIOR ===
+promo_junior:
+  id: promo_junior
+  titulo: ¡Has subido de nivel!
+  descripcion: Después de meses de esfuerzo, tu empresa te ofrece un aumento y el título de Junior Developer.
+  tipo: promocion
+  opciones:
+    - label: "Aceptar la promoción"
+      efectos:
+        - stat: skill_level
+          delta: 5
+        - stat: salario
+          delta: 15000
+        - stat: nivel
+          set: junior
+        - logro: "Junior Developer"
+      next_node: decision_carrera_1
+      requiere:
+        skill_min: 20
+
+# === ETAPA 2: DECISIONES DE CARRERA ===
+decision_carrera_1:
+  id: decision_carrera_1
+  titulo: El crossroads profesional
+  descripcion: Tienes 1 año de experiencia. Una empresa grande te hace una oferta interesante.
+  tipo: eleccion_carrera
+  opciones:
+    - label: "Unirte a una startup pequeña"
+      efectos:
+        - stat: estres
+          delta: 15
+        - stat: skill_level
+          delta: 10
+        - stat: reputacion
+          delta: 5
+      next_node: startup_vs_corporacion
+      requiere: null
+      
+    - label: "Ir a una empresa establecida"
+      efectos:
+        - stat: reputacion
+          delta: 10
+        - stat: estres
+          delta: -5
+      next_node: startup_vs_corporacion
+      requiere: null
+
+startup_vs_corporacion:
+  id: startup_vs_corporacion
+  titulo: Estilo de trabajo
+  descripcion: Tu elección anterior define el tipo de desafíos que enfrentarás.
+  tipo: reflexion
+  opciones:
+    - label: "Continuar en este camino"
+      efectos:
+        - stat: años_experiencia
+          delta: 1
+      next_node: decision_freelance_1
+      requiere: null
+
+decision_freelance_1:
+  id: decision_freelance_1
+  titulo: El llamado del freelance
+  descripcion: Un cliente potencial te ofrece un proyecto freelance bien pagado. Consideras dar el salto.
+  tipo: riesgo
+  opciones:
+    - label: "Aceptar el proyecto freelance"
+      efectos:
+        - stat: salario
+          delta: 10000
+        - stat: estres
+          delta: 25
+        - stat: reputacion
+          delta: 10
+        - logro: "Freelancer"
+      next_node: decision_tech_1
+      requiere:
+        skill_min: 40
+      
+    - label: "Mantener tu empleo actual"
+      efectos:
+        - stat: stres
+          delta: -10
+        - stat: reputacion
+          delta: 5
+      next_node: decision_tech_1
+      requiere: null
+
+# === DECISIONES DE ESPECIALIZACIÓN AVANZADA ===
+decision_tech_1:
+  id: decision_tech_1
+  titulo: Especialización o generalización
+  descripcion: Tienes la oportunidad de convertirte en experto en una tecnología específica o mantener un perfil generalista.
+  tipo: eleccion_carrera
+  opciones:
+    - label: "Convertirme en experto de mi stack actual"
+      efectos:
+        - stat: skill_level
+          delta: 20
+        - stat: estres
+          delta: 10
+      next_node: decision_senior_1
+      requiere:
+        stack: React
+      
+    - label: "Aprender una nueva tecnología emergente"
+      efectos:
+        - stat: skill_level
+          delta: 15
+        - stat: stack
+          add: TypeScript
+      next_node: decision_senior_1
+      requiere: null
+
+decision_senior_1:
+  id: decision_senior_1
+  titulo: El camino hacia Senior
+  descripcion: Con 3 años de experiencia, estás listo para dar el salto a Semi-Senior o Senior.
+  tipo: promocion
+  opciones:
+    - label: "Buscar promoción a Semi-Senior"
+      efectos:
+        - stat: nivel
+          set: semi-senior
+        - stat: salario
+          delta: 20000
+        - stat: skill_level
+          delta: 10
+        - logro: "Semi-Senior Developer"
+      next_node: decision_liderazgo_1
+      requiere:
+        skill_min: 50
+        
+    - label: "Enfocarme en liderazgo técnico sin título"
+      efectos:
+        - stat: skill_level
+          delta: 5
+        - stat: reputacion
+          delta: 15
+      next_node: decision_liderazgo_1
+      requiere: null
+
+# === DECISIONES DE LIDERAZGO ===
+decision_liderazgo_1:
+  id: decision_liderazgo_1
+  titulo: Oportunidad de liderazgo
+  descripcion: Tu empresa te ofrece liderar un equipo de developers junior.
+  tipo: liderazgo
+  opciones:
+    - label: "Aceptar el rol de Team Lead"
+      efectos:
+        - stat: skill_level
+          delta: 10
+        - stat: estres
+          delta: 20
+        - stat: reputacion
+          delta: 20
+        - logro: "Team Lead"
+      next_node: decision_tech_2
+      requiere:
+        skill_min: 60
+        
+    - label: "Continuar como individual contributor"
+      efectos:
+        - stat: skill_level
+          delta: 15
+        - stat: estres
+          delta: -10
+      next_node: decision_tech_2
+      requiere: null
+
+# === ETAPA 3: DECISIONES DE RIESGO ===
+decision_tech_2:
+  id: decision_tech_2
+  titulo: El dilema del cambio de stack
+  descripcion: Una nueva tecnología está revolucionando la industria. Deberías aprenderla o mantener tu expertise actual.
+  tipo: riesgo
+  opciones:
+    - label: "Aprender la nueva tecnología (Rust/Go/AI)"
+      efectos:
+        - stat: skill_level
+          delta: 15
+        - stat: stres
+          delta: 20
+        - stat: stack
+          add: AI/ML
+        - logro: "Early Adopter"
+      next_node: decision_riesgo_1
+      requiere:
+        skill_min: 65
+      
+    - label: "Mantener mi stack actual"
+      efectos:
+        - stat: reputacion
+          delta: -5
+        - stat: stres
+          delta: -10
+      next_node: decision_riesgo_1
+      requiere: null
+
+decision_riesgo_1:
+  id: decision_riesgo_1
+  titulo: La decisión de emprender
+  descripcion: Un inversionista está interesado en tu idea de startup. Es un momento decisivo.
+  tipo: emprendimiento
+  opciones:
+    - label: "Emprender tiempo completo"
+      efectos:
+        - stat: stres
+          delta: 40
+        - stat: skill_level
+          delta: 20
+        - stat: salario
+          delta: -20000
+        - logro: "Emprendedor"
+      next_node: final_cto
+      requiere:
+        skill_min: 80
+        reputacion_min: 70
+        
+    - label: "Mantener el empleo y emprender como side hustle"
+      efectos:
+        - stat: estres
+          delta: 30
+        - stat: reputacion
+          delta: 10
+      next_node: decision_burnout_check
+      requiere: null
+
+# === CHECK DE BURNOUT ===
+decision_burnout_check:
+  id: decision_burnout_check
+  titulo: Estado de energía
+  descripcion: Es momento de evaluar cómo te sientes con tu carrera actual.
+  tipo: evaluacion
+  opciones:
+    - label: "Continuar"
+      efectos: []
+      next_node: decision_final_senior
+      requiere: null
+
+# === ETAPA FINAL: SENIOR ===
+decision_final_senior:
+  id: decision_final_senior
+  titulo: El camino hacia Senior/Lead
+  descripcion: Con 5+ años de experiencia, estás en la cúspide de tu carrera.
+  tipo: promocion
+  opciones:
+    - label: "Buscar promoción a Senior Developer"
+      efectos:
+        - stat: nivel
+          set: senior
+        - stat: salario
+          delta: 30000
+        - stat: skill_level
+          delta: 10
+        - stat: reputacion
+          delta: 15
+        - logro: "Senior Developer"
+      next_node: decision_cto
+      requiere:
+        skill_min: 75
+        
+    - label: "Buscar rol de Lead/Staff Engineer"
+      efectos:
+        - stat: nivel
+          set: lead
+        - stat: salario
+          delta: 40000
+        - stat: skill_level
+          delta: 5
+        - stat: reputacion
+          delta: 20
+        - logro: "Tech Lead"
+      next_node: decision_cto
+      requiere:
+        skill_min: 85
+
+# === DECISIÓN CTO ===
+decision_cto:
+  id: decision_cto
+  titulo: La cima de la montaña
+  descripcion: Has llegado lejos. Una empresa te ofrece el rol de CTO o VP of Engineering.
+  tipo: final
+  opciones:
+    - label: "Aceptar el rol de CTO"
+      efectos:
+        - stat: nivel
+          set: lead
+        - stat: salario
+          delta: 50000
+        - stat: reputacion
+          delta: 30
+        - logro: "CTO"
+        - trigger_event: final_cto
+      next_node: final_victory
+      requiere:
+        skill_min: 90
+        
+    - label: "Continuar como Senior/Lead técnico"
+      efectos:
+        - stat: skill_level
+          delta: 10
+        - logro: "Senior Champion"
+      next_node: final_victory
+      requiere: null
+
+# === FINAL: VICTORY ===
+final_victory:
+  id: final_victory
+  titulo: ¡Has alcanzado el éxito!
+  descripcion: Felicitaciones. Has construido una carrera exitosa en IT.
+  tipo: final
+  opciones: []
+
+# === GAME OVER: BURNOUT ===
+final_burnout:
+  id: final_burnout
+  titulo: Has sufrido burnout
+  descripcion: Tu nivel de estrés es demasiado alto. Es momento de tomar un descanso forzado.
+  tipo: game_over
+  opciones:
+    - label: "Reiniciar carrera"
+      efectos:
+        - stat: nivel
+          set: trainee
+        - stat: skill_level
+          set: 0
+        - stat: estres
+          set: 0
+        - stat: salario
+          set: 15000
+        - stat: años_experiencia
+          set: 0
+      next_node: inicio
+      requiere: null
