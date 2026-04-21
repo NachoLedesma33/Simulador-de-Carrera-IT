@@ -1,0 +1,278 @@
+# Logros desbloqueables del Simulador de Carrera IT
+
+achievements:
+  # === LOGROS DE STACK ===
+  stack_master:
+    id: stack_master
+    name: Stack Master
+    description: Aprende 5 tecnologías diferentes
+    condition:
+      type: stack_count
+      value: 5
+    message: "¡Tienes un stack completo! Dominas 5 tecnologías."
+    icon: 🛠️
+    category: stack
+    puntos: 50
+
+  full_stack_hero:
+    id: full_stack_hero
+    name: Full Stack Hero
+    description: Aprende tecnologías de frontend, backend y base de datos
+    condition:
+      type: stack_categories
+      categories: [frontend, backend, database]
+    message: "¡Eres un Full Stack Hero! Dominas todo el stack."
+    icon: 🌟
+    category: stack
+    puntos: 100
+
+  tech_collector:
+    id: tech_collector
+    name: Coleccionista Tech
+    description: Aprende 10 tecnologías diferentes
+    condition:
+      type: stack_count
+      value: 10
+    message: "¡Coleccionista imparable! Tienes 10 tecnologías."
+    icon: 📚
+    category: stack
+    puntos: 75
+
+  early_adopter:
+    id: early_adopter
+    name: Early Adopter
+    description: Aprende una tecnología emergente (AI/ML, Rust, Go, Kubernetes)
+    condition:
+      type: stack_tech
+      techs: [AI/ML, Machine Learning, Rust, Go, Kubernetes, TensorFlow, PyTorch]
+    message: "¡Siempre un paso adelante! Has adoptado nuevas tecnologías."
+    icon: 🚀
+    category: stack
+    puntos: 60
+
+  # === LOGROS DE NIVEL ===
+  first_promotion:
+    id: first_promotion
+    name: Primera Promoción
+    description: Sube de nivel por primera vez
+    condition:
+      type: level_up
+      from_level: trainee
+      to_level: junior
+    message: "¡Felicitaciones! Has conseguido tu primera promoción."
+    icon: 🎉
+    category: nivel
+    puntos: 50
+
+  junior_graduate:
+    id: junior_graduate
+    name: Junior Graduate
+    description: Alcanza el nivel Junior
+    condition:
+      type: nivel
+      value: junior
+    message: "¡Bienvenido a Junior! El camino apenas comienza."
+    icon: 📖
+    category: nivel
+    puntos: 50
+
+  semi_senior:
+    id: semi_senior
+    name: Semi-Senior
+    description: Alcanza el nivel Semi-Senior
+    condition:
+      type: nivel
+      value: semi-senior
+    message: "¡Medio camino! Eres un Semi-Senior respetado."
+    icon: 💼
+    category: nivel
+    puntos: 75
+
+  senior_dev:
+    id: senior_dev
+    name: Senior Developer
+    description: Alcanza el nivel Senior
+    condition:
+      type: nivel
+      value: senior
+    message: "¡El nivel máximo técnico! Eres un Senior Developer."
+    icon: ⭐
+    category: nivel
+    puntos: 100
+
+  tech_lead:
+    id: tech_lead
+    name: Tech Lead
+    description: Alcanza el nivel Lead/CTO
+    condition:
+      type: nivel
+      value: lead
+    message: "¡La cima! Eres un líder técnico."
+    icon: 👑
+    category: nivel
+    puntos: 200
+
+  # === LOGROS DE CARRERA ===
+  senior_velocity:
+    id: senior_velocity
+    name: Senior Velocity
+    description: Llega a Senior en menos de 5 años
+    condition:
+      type: career_speed
+      nivel: senior
+      max_years: 5
+    message: "¡Velocidad máxima! Llegaste a Senior en tiempo récord."
+    icon: ⚡
+    category: carrera
+    puntos: 150
+
+  veteran:
+    id: veteran
+    name: Veterano
+    description: Superviviente de 10 años en la industria
+    condition:
+      type: experiencia
+      value: 10
+    message: "¡Veterano de la industria! 10 años de experiencia."
+    icon: 🏅
+    category: carrera
+    puntos: 100
+
+  marathon_runner:
+    id: marathon_runner
+    name: Maratón
+    description: Juega durante 50 decisiones
+    condition:
+      type: decisiones_count
+      value: 50
+    message: "¡Maratonista! Has tomado 50 decisiones."
+    icon: 🏃
+    category: carrera
+    puntos: 50
+
+  # === LOGROS DE STRESS ===
+  resiliente:
+    id: resiliente
+    name: Resiliente
+    description: Mantén estrés > 80 sin llegar a burnout
+    condition:
+      type: high_stress_survived
+      min_stress: 80
+      decision_count: 3
+    message: "¡Increíble resistencia! Soportaste estrés extremo."
+    icon: 💪
+    category: stress
+    puntos: 100
+
+  zen_master:
+    id: zen_master
+    name: Zen Master
+    description: Mantén estrés bajo 20 durante 10 decisiones
+    condition:
+      type: low_stress_streak
+      max_stress: 20
+      decision_count: 10
+    message: "¡Totalmente zen! Mantuviste la calma absoluta."
+    icon: 🧘
+    category: stress
+    puntos: 75
+
+  # === LOGROS DE REPUTACIÓN ===
+  networking_king:
+    id: networking_king
+    name: Networking King
+    description: Alcanza reputación mayor a 90
+    condition:
+      type: reputacion
+      value: 90
+    message: "¡Rey del networking! Tu reputación es impecable."
+    icon: 🤝
+    category: reputacion
+    puntos: 100
+
+  influencer:
+    id: influencer
+    name: Influencer
+    description: Alcanza reputación mayor a 70
+    condition:
+      type: reputacion
+      value: 70
+    message: "¡Influencer tech! Todos te conocen."
+    icon: 📣
+    category: reputacion
+    puntos: 75
+
+  # === LOGROS DE SALARIO ===
+  six_figures:
+    id: six_figures
+    name: Six Figures
+    description: Alcanza un salario de $100,000
+    condition:
+      type: salario
+      value: 100000
+    message: "¡Seis cifras! Ganas más de $100k."
+    icon: 💰
+    category: salary
+    puntos: 100
+
+  money_printer:
+    id: money_printer
+    name: Money Printer
+    description: Gana $200,000 acumulados en total
+    condition:
+      type: salary_total
+      value: 200000
+    message: "¡Impresora de dinero! Has ganado mucho."
+    icon: 🖨️
+    category: salary
+    puntos: 150
+
+  # === LOGROS ESPECIALES ===
+  workaholic:
+    id: workaholic
+    name: Workaholic
+    description: Toma 20 decisiones sin descansar
+    condition:
+      type: decisions_no_rest
+      value: 20
+    message: "¡Workaholic! Sin miedo al trabajo."
+    icon: 🏢
+    category: especial
+    puntos: 50
+
+  balanced_pro:
+    id: balanced_pro
+    name: Balanced Pro
+    description: Mantén stress < 30 y skill > 50 simultáneamente
+    condition:
+      type: balance
+      max_stress: 30
+      min_skill: 50
+    message: "¡Perfectamente balanceado! Trabajo y vida en harmony."
+    icon: ⚖️
+    category: especial
+    puntos: 75
+
+  lucky_star:
+    id: lucky_star
+    name: Lucky Star
+    description: Recibe 3 eventos positivos consecutivos
+    condition:
+      type: positive_events_streak
+      value: 3
+    message: "¡Tu estrella de la suerte brilla!"
+    icon: 🍀
+    category: especial
+    puntos: 60
+
+  survivor:
+    id: survivor
+    name: Survivor
+    description: Pasa 3 crisis sin burnout
+    condition:
+      type: crisis_survived
+      value: 3
+    message: "¡Sobreviviente! Has pasado múltiples crisis."
+    icon: 🛡️
+    category: especial
+    puntos: 100

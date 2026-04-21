@@ -8,6 +8,21 @@ from .validators import (
     sanitize_player_state,
 )
 
+from .career_paths import (
+    get_career_trajectory,
+    calculate_salary_multiplier,
+    get_next_milestone,
+    get_milestone_progress,
+    generate_career_advice,
+    get_career_tips,
+    calculate_career_score,
+    get_career_ranking,
+    generate_career_summary,
+    CareerMilestone,
+    CareerAdvice,
+    CAREER_MILESTONES,
+)
+
 __all__ = [
     'validate_player_state',
     'validate_decision_transition',
@@ -16,4 +31,16 @@ __all__ = [
     'validate_decision_node',
     'validate_event',
     'sanitize_player_state',
+    'get_career_trajectory',
+    'calculate_salary_multiplier',
+    'get_next_milestone',
+    'get_milestone_progress',
+    'generate_career_advice',
+    'get_career_tips',
+    'calculate_career_score',
+    'get_career_ranking',
+    'generate_career_summary',
+    'CareerMilestone',
+    'CareerAdvice',
+    'CAREER_MILESTONES',
 ]

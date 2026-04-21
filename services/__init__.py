@@ -29,6 +29,22 @@ from .session_manager import (
     get_flag,
 )
 
+from .event_system import (
+    EventSystem,
+    GameEvent,
+    EventCondition,
+    EventEffect,
+    create_event_system,
+    trigger_random_event,
+)
+
+from .achievement_system import (
+    AchievementSystem,
+    Achievement,
+    create_achievement_system,
+    check_achievements,
+)
+
 __all__ = [
     'apply_stat_change',
     'apply_stat_set',
@@ -55,4 +71,14 @@ __all__ = [
     'add_decision_to_history',
     'set_flag',
     'get_flag',
+    'EventSystem',
+    'GameEvent',
+    'EventCondition',
+    'EventEffect',
+    'create_event_system',
+    'trigger_random_event',
+    'AchievementSystem',
+    'Achievement',
+    'create_achievement_system',
+    'check_achievements',
 ]
