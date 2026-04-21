@@ -594,6 +594,103 @@ def api_game_builds():
     return json_success(data=get_available_builds())
 
 
+@main_bp.route('/api/game/export', methods=['POST'])
+def api_game_export():
+    error = require_session()
+    if error:
+        return error
+
+    player = load_player_from_session()
+    data = request.get_json() or {}
+    filename = data.get('filename')
+
+    from utils.export_game_state import export_to_file
+    try:
+        result = export_to_file(player, filename)
+        return json_success(data=result)
+    except Exception as e:
+        return json_error(str(e), 'EXPORT_ERROR')
+
+
+@main_bp.route('/api/game/import', methods=['POST'])
+def api_game_import():
+    data = request.get_json() or {}
+    filename = data.get('filename')
+
+    if not filename:
+        return json_error('Filename requerido', 'FILENAME_REQUIRED')
+
+    from utils.export_game_state import import_from_file
+    player = import_from_file(filename)
+
+    if not player:
+        return json_error('Archivo no válido o corrupto', 'IMPORT_ERROR')
+
+    save_player_to_session(player)
+
+    from utils import get_current_decision_id
+    current = get_current_decision_id() or 'inicio'
+
+    return json_success(
+        message='Partida importada correctamente',
+        data={
+            'player': player.to_dict(),
+            'current_decision': current
+        }
+    )
+
+
+@main_bp.route('/api/game/saves')
+def api_game_saves():
+    from utils.export_game_state import list_saves
+    saves = list_saves()
+    return json_success(data={'saves': saves, 'count': len(saves)})
+
+
+@main_bp.route('/api/game/saves/<filename>', methods=['DELETE'])
+def api_game_delete_save(filename):
+    from utils.export_game_state import delete_save
+    if delete_save(filename):
+        return json_success(message='Partida eliminada')
+    return json_error('Archivo no encontrado', 'NOT_FOUND')
+
+
+@main_bp.route('/api/game/career-summary')
+def api_game_career_summary():
+    error = require_session()
+    if error:
+        return error
+
+    player = load_player_from_session()
+
+    from utils.export_game_state import export_career_summary
+    summary = export_career_summary(player)
+
+    return json_success(data=summary)
+
+
+@main_bp.route('/import')
+def import_page():
+    data = request.args.get('data')
+    if not data:
+        flash('Link inválido', 'error')
+        return redirect(url_for('main.index'))
+
+    from utils.export_game_state import import_from_shareable_link
+    player = import_from_shareable_link(data)
+
+    if not player:
+        flash('Error al importar desde link', 'error')
+        return redirect(url_for('main.index'))
+
+    clear_session()
+    save_player_to_session(player)
+    set_current_decision_id('inicio')
+
+    flash('Partida importada correctamente', 'success')
+    return redirect(url_for('main.decision_view', decision_id='inicio'))
+
+
 app.register_blueprint(main_bp)
 
 
