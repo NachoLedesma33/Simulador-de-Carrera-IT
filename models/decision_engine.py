@@ -26,7 +26,8 @@ class DecisionEngine:
 
         with open(path, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
-            self.events = data.get('eventos_aleatorios', [])
+            events_data = data.get('eventos_aleatorios', [])
+            self.events = list(events_data.values()) if isinstance(events_data, dict) else events_data
 
     def get_decision(self, decision_id: str, player_state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         decision = self.decisions.get(decision_id)
