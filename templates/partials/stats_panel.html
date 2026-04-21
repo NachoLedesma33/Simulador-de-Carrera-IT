@@ -1,0 +1,322 @@
+<div class="stats-panel" id="statsPanel">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">📊 Tu Progreso</h6>
+            <span class="badge bg-primary" id="playerLevel">{{ player.nivel|title }}</span>
+        </div>
+        <div class="card-body">
+            <div class="stat-item mb-3">
+                <div class="stat-header">
+                    <span class="stat-icon">
+                        {% if player.nivel == 'trainee' %}🌱
+                        {% elif player.nivel == 'junior' %}📚
+                        {% elif player.nivel == 'semi-senior' %}💪
+                        {% elif player.nivel == 'senior' %}⭐
+                        {% elif player.nivel == 'lead' %}👑
+                        {% else %}🎯{% endif %}
+                    </span>
+                    <span class="stat-label">Nivel</span>
+                    <span class="stat-value" id="playerLevelValue">{{ player.nivel|title }}</span>
+                </div>
+            </div>
+
+            <div class="stat-item mb-3">
+                <div class="stat-header">
+                    <span class="stat-icon">📈</span>
+                    <span class="stat-label">Skill Level</span>
+                    <span class="stat-value" id="playerSkill">{{ player.skill_level }}</span>
+                </div>
+                <div class="progress">
+                    {% set skill_color = 'bg-success' if player.skill_level >= 70 else 'bg-warning' if player.skill_level >= 40 else 'bg-danger' %}
+                    <div class="progress-bar {{ skill_color }}" id="skillBar"
+                         role="progressbar"
+                         style="width: {{ player.skill_level }}%"
+                         aria-valuenow="{{ player.skill_level }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                    </div>
+                </div>
+                <small class="text-muted" id="skillText">{{ player.skill_level }}/100</small>
+            </div>
+
+            <div class="stat-item mb-3">
+                <div class="stat-header">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-label">Salario</span>
+                    <span class="stat-value text-success" id="playerSalary">${{ player.salario|format_number }}</span>
+                </div>
+            </div>
+
+            <div class="stat-item mb-3">
+                <div class="stat-header">
+                    <span class="stat-icon">😰</span>
+                    <span class="stat-label">Estrés</span>
+                    <span class="stat-value" id="playerStress">{{ player.estres }}%</span>
+                </div>
+                <div class="progress">
+                    {% set stress_color = 'bg-success' if player.estres < 30 else 'bg-warning' if player.estres <= 70 else 'bg-danger' %}
+                    <div class="progress-bar {{ stress_color }}" id="stressBar"
+                         role="progressbar"
+                         style="width: {{ player.estres }}%"
+                         aria-valuenow="{{ player.estres }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                    </div>
+                </div>
+                <small class="text-muted" id="stressText">
+                    {% if player.estres < 30 %}Bajo{% elif player.estres <= 70 %}Moderado{% else %}Crítico{% endif %}
+                </small>
+            </div>
+
+            <div class="stat-item mb-3">
+                <div class="stat-header">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-label">Reputación</span>
+                    <span class="stat-value" id="playerRep">{{ player.reputacion }}</span>
+                </div>
+                <div class="reputation-stars" id="reputationStars">
+                    {% set stars_full = (player.reputacion / 20)|int %}
+                    {% for i in range(5) %}
+                        <span class="star {% if i < stars_full %}filled{% endif %}">★</span>
+                    {% endfor %}
+                </div>
+                <small class="text-muted" id="repText">{{ player.reputacion }}/100</small>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-header">
+                    <span class="stat-icon">📅</span>
+                    <span class="stat-label">Experiencia</span>
+                    <span class="stat-value" id="playerExp">{{ "%.1f"|format(player.años_experiencia) }} años</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="update-indicator">
+        <span class="pulse"></span>
+        <small class="text-muted">Actualizando...</small>
+    </div>
+</div>
+
+<style>
+.stats-panel {
+    position: relative;
+}
+
+.stat-item {
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-icon {
+    font-size: 1rem;
+    width: 24px;
+    text-align: center;
+}
+
+.stat-label {
+    flex: 1;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.progress {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 0.5s ease;
+}
+
+.bg-success {
+    background: linear-gradient(90deg, #00ff96, #00cc66) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(90deg, #ffc800, #ff9600) !important;
+}
+
+.bg-danger {
+    background: linear-gradient(90deg, #ff6b6b, #ff3232) !important;
+}
+
+.reputation-stars {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0.5rem 0;
+}
+
+.star {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.2);
+    transition: color 0.3s ease;
+}
+
+.star.filled {
+    color: #ffc800;
+    text-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+}
+
+.update-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: 0.5rem;
+}
+
+.update-indicator.active {
+    display: flex;
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.updating .stat-value,
+.updating .progress-bar {
+    animation: flash 0.5s ease;
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+</style>
+
+<script>
+(function() {
+    const UPDATE_INTERVAL = 5000;
+    let updateTimer = null;
+
+    function updateStats() {
+        const indicator = document.querySelector('.update-indicator');
+        if (indicator) indicator.classList.add('active');
+
+        fetch('/stats')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) return;
+
+                document.getElementById('playerLevel').textContent = data.nivel.charAt(0).toUpperCase() + data.nivel.slice(1);
+                document.getElementById('playerLevelValue').textContent = data.nivel.charAt(0).toUpperCase() + data.nivel.slice(1);
+
+                document.getElementById('playerSkill').textContent = data.skill_level;
+                const skillBar = document.getElementById('skillBar');
+                const skillPercent = Math.min(100, Math.max(0, data.skill_level));
+                skillBar.style.width = skillPercent + '%';
+                skillBar.setAttribute('aria-valuenow', data.skill_level);
+                skillBar.className = 'progress-bar ' + (data.skill_level >= 70 ? 'bg-success' : data.skill_level >= 40 ? 'bg-warning' : 'bg-danger');
+                document.getElementById('skillText').textContent = data.skill_level + '/100';
+
+                document.getElementById('playerSalary').textContent = '$' + data.salario.toLocaleString();
+
+                const stressValue = document.getElementById('playerStress');
+                stressValue.textContent = data.estres + '%';
+                stressValue.className = 'stat-value' + (data.estres > 70 ? ' text-danger' : '');
+                const stressBar = document.getElementById('stressBar');
+                const stressPercent = Math.min(100, Math.max(0, data.estres));
+                stressBar.style.width = stressPercent + '%';
+                stressBar.setAttribute('aria-valuenow', data.estres);
+                stressBar.className = 'progress-bar ' + (data.estres < 30 ? 'bg-success' : data.estres <= 70 ? 'bg-warning' : 'bg-danger');
+                document.getElementById('stressText').textContent = data.estres < 30 ? 'Bajo' : data.estres <= 70 ? 'Moderado' : 'Crítico';
+
+                document.getElementById('playerRep').textContent = data.reputacion;
+                const starsContainer = document.getElementById('reputationStars');
+                const starsFull = Math.floor(data.reputacion / 20);
+                starsContainer.innerHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElement('span');
+                    star.className = 'star' + (i < starsFull ? ' filled' : '');
+                    star.textContent = '★';
+                    starsContainer.appendChild(star);
+                }
+                document.getElementById('repText').textContent = data.reputacion + '/100';
+
+                document.getElementById('playerExp').textContent = data.años_experiencia.toFixed(1) + ' años';
+
+                document.getElementById('statsPanel').classList.add('updating');
+                setTimeout(() => {
+                    document.getElementById('statsPanel').classList.remove('updating');
+                }, 500);
+
+                if (data.estres > 80) {
+                    showBurnoutWarning();
+                }
+            })
+            .catch(error => console.error('Error updating stats:', error))
+            .finally(() => {
+                if (indicator) indicator.classList.remove('active');
+            });
+    }
+
+    function showBurnoutWarning() {
+        const warning = document.querySelector('.alert-burnout');
+        if (!warning) {
+            const alert = document.createElement('div');
+            alert.className = 'alert-burnout animate-slide-down';
+            alert.innerHTML = '⚠️ <strong>¡Alto nivel de estrés!</strong> - Riesgo de burnout.';
+            const container = document.querySelector('.flash-messages') || document.querySelector('.main-content');
+            if (container) {
+                container.insertBefore(alert, container.firstChild);
+            }
+        }
+    }
+
+    function startAutoUpdate() {
+        updateStats();
+        updateTimer = setInterval(updateStats, UPDATE_INTERVAL);
+    }
+
+    function stopAutoUpdate() {
+        if (updateTimer) {
+            clearInterval(updateTimer);
+            updateTimer = null;
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startAutoUpdate);
+    } else {
+        startAutoUpdate();
+    }
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            stopAutoUpdate();
+        } else {
+            updateStats();
+            startAutoUpdate();
+        }
+    });
+})();
+</script>

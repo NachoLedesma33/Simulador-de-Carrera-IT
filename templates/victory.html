@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Victoria! - Simulador Carrera IT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .container { max-width: 700px; padding: 40px; text-align: center; position: relative; z-index: 1; }
+        .victory-icon { font-size: 6rem; margin-bottom: 20px; animation: bounce 1s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .victory-title { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(135deg, #00ff96, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .victory-subtitle { font-size: 1.2rem; color: #a0a0a0; margin-bottom: 40px; }
+        .trophy-display { font-size: 8rem; margin: 20px 0; animation: glow 2s ease-in-out infinite; }
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 200, 0, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 200, 0, 0.8)); }
+        }
+        .final-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: #00ff96; }
+        .stat-label { font-size: 0.75rem; color: #a0a0a0; margin-top: 5px; }
+        .achievements-section { margin-bottom: 30px; }
+        .section-title { font-size: 1.1rem; color: #ffc800; margin-bottom: 15px; }
+        .achievements-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.2), rgba(255, 150, 0, 0.2));
+            border: 1px solid rgba(255, 200, 0, 0.4);
+            border-radius: 25px;
+            font-size: 0.85rem;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        .achievement-badge:nth-child(1) { animation-delay: 0.1s; }
+        .achievement-badge:nth-child(2) { animation-delay: 0.2s; }
+        .achievement-badge:nth-child(3) { animation-delay: 0.3s; }
+        .achievement-badge:nth-child(4) { animation-delay: 0.4s; }
+        .achievement-badge:nth-child(5) { animation-delay: 0.5s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ranking-section { margin-bottom: 30px; }
+        .ranking-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+        }
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ranking-item:last-child { border-bottom: none; }
+        .ranking-position {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+        .ranking-position.gold { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #1a1a2e; }
+        .ranking-position.silver { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #1a1a2e; }
+        .ranking-position.bronze { background: linear-gradient(135deg, #cd7f32, #b87333); color: #1a1a2e; }
+        .ranking-name { flex: 1; }
+        .ranking-score { color: #00ff96; font-weight: 600; }
+        .ranking-you { color: #00d9ff; }
+        .actions { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; font-size: 1rem; }
+        .btn-primary { background: linear-gradient(135deg, #00ff96 0%, #00cc66 100%); color: #1a1a2e; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 255, 150, 0.3); }
+        .btn-secondary { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+        .btn-share { background: linear-gradient(135deg, #4267b2, #3b5998); color: #fff; }
+        .btn-share:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(66, 103, 178, 0.3); }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        <div class="victory-icon">🎉</div>
+        <h1 class="victory-title">¡VICTORIA!</h1>
+        <p class="victory-subtitle">Has alcanzado el éxito en tu carrera IT</p>
+
+        <div class="trophy-display">🏆</div>
+
+        <div class="final-stats">
+            <div class="stat-card">
+                <div class="stat-value">{{ nivel_alcanzado|title }}</div>
+                <div class="stat-label">Nivel Final</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ skill_level }}</div>
+                <div class="stat-label">Skill</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${{ salario|format_number }}</div>
+                <div class="stat-label">Salario</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ años_experiencia }} años</div>
+                <div class="stat-label">Experiencia</div>
+            </div>
+        </div>
+
+        {% if logros_list %}
+        <div class="achievements-section">
+            <h3 class="section-title">🏆 Logros Desbloqueados</h3>
+            <div class="achievements-grid">
+                {% for logro in logros_list %}
+                <div class="achievement-badge">
+                    <span>🏆</span>
+                    <span>{{ logro }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="ranking-section">
+            <h3 class="section-title">📊 Clasificación Simulada</h3>
+            <div class="ranking-card">
+                {% for entry in ranking %}
+                <div class="ranking-item {% if entry.is_you %}ranking-you{% endif %}">
+                    <div class="ranking-position {% if loop.index == 1 %}gold{% elif loop.index == 2 %}silver{% elif loop.index == 3 %}bronze{% endif %}">
+                        {{ loop.index }}
+                    </div>
+                    <div class="ranking-name">
+                        {% if entry.is_you %}👤 {% endif %}{{ entry.name }}
+                    </div>
+                    <div class="ranking-score">{{ entry.score }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-share" onclick="compartirResultado()">
+                📤 Compartir Resultado
+            </button>
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                🎮 Nueva Partida
+            </a>
+            <a href="{{ url_for('main.reset') }}" class="btn btn-secondary">
+                🔄 Reiniciar
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const confetti = [];
+        const colors = ['#00ff96', '#00d9ff', '#ffc800', '#ff6b6b', '#9664ff', '#00ffff'];
+
+        class Confetto {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -10;
+                this.size = Math.random() * 10 + 5;
+                this.speedY = Math.random() * 3 + 2;
+                this.speedX = Math.random() * 4 - 2;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 10 - 5;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+                this.speedY += 0.1;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 150; i++) {
+                confetti.push(new Confetto());
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach((c, index) => {
+                c.update();
+                c.draw();
+                if (c.y > canvas.height) {
+                    confetti.splice(index, 1);
+                }
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+
+        createConfetti();
+        animateConfetti();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        function compartirResultado() {
+            const mensaje = `¡He completado Simulador de Carrera IT! 🏆\n\n` +
+                `Nivel: {{ nivel_alcanzado|title }}\n` +
+                `Skill: {{ skill_level }}\n` +
+                `Salario: ${{ salario|format_number }}\n` +
+                `Años de experiencia: {{ años_experiencia }}\n` +
+                `Logros: {{ logros_count }}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mi resultado en Simulador IT',
+                    text: mensaje
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(mensaje).then(() => {
+                    alert('¡Resultado copiado al portapapeles!');
+                }).catch(() => {
+                    alert(mensaje);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

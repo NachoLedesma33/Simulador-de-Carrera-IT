@@ -65,15 +65,52 @@ app.jinja_env.filters['currency'] = format_currency
 app.jinja_env.filters['skill_bar'] = format_skill_bar
 
 
+TECH_CATEGORIES = {
+    'frontend': ['HTML', 'CSS', 'JavaScript', 'React', 'Vue.js', 'Angular', 'TypeScript', 'SASS', 'Tailwind', 'Bootstrap', 'jQuery', 'Next.js', 'Nuxt.js', 'D3.js', 'Three.js'],
+    'backend': ['Python', 'Java', 'Node.js', 'Go', 'Rust', 'Ruby', 'PHP', 'C#', 'ASP.NET', 'Django', 'Flask', 'FastAPI', 'Express', 'Spring', 'Laravel', 'Rails', 'ASP.NET Core'],
+    'database': ['SQL', 'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'SQLite', 'Oracle', 'SQL Server', 'Firebase', 'Elasticsearch', 'Cassandra', 'DynamoDB'],
+    'devops': ['Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP', 'Jenkins', 'GitLab', 'GitHub Actions', 'Terraform', 'Ansible', 'CircleCI', 'Travis CI', 'Nginx', 'Apache'],
+    'mobile': ['Swift', 'Kotlin', 'React Native', 'Flutter', 'iOS', 'Android', 'Xamarin', 'Ionic', 'Cordova'],
+    'data': ['Pandas', 'NumPy', 'TensorFlow', 'PyTorch', 'AI/ML', 'Machine Learning', 'Data Science', 'Excel', 'PowerBI', 'Tableau', 'R', 'Spark', 'Hadoop']
+}
+
+
+def get_tech_category(tech):
+    tech_upper = tech.upper()
+    for category, technologies in TECH_CATEGORIES.items():
+        if any(t.upper() == tech_upper for t in technologies):
+            return category
+    return 'default'
+
+
+app.jinja_env.globals['get_tech_category'] = get_tech_category
+
+
 @main_bp.route('/')
 def index():
     player = load_player_from_session()
 
     if player and has_active_game():
         current_decision_id = get_current_decision_id() or 'inicio'
-        return redirect(url_for('main.decision_view', decision_id=current_decision_id))
+        player_state = get_player_state_dict() or {}
+        decisiones = player_state.get('decisiones_tomadas', [])
+        recent_decisions = decisiones[-5:] if decisiones else []
 
-    return render_template('index.html', has_active=False)
+        return render_template(
+            'index.html',
+            has_active=True,
+            current_player=player,
+            current_decision_id=current_decision_id,
+            recent_decisions=recent_decisions
+        )
+
+    return render_template(
+        'index.html',
+        has_active=False,
+        current_player=None,
+        current_decision_id=None,
+        recent_decisions=[]
+    )
 
 
 @main_bp.route('/new_game', methods=['POST'])
@@ -263,6 +300,72 @@ def check_requirements(decision_id):
     result = check_can_make(player, requirements)
 
     return jsonify(result)
+
+
+@main_bp.route('/victory')
+def victory():
+    player = load_player_from_session()
+    if not player:
+        return redirect(url_for('main.index'))
+
+    player_state = player.to_dict()
+    decisiones = player_state.get('decisiones_tomadas', [])
+
+    ranking = [
+        {'name': 'TechMaster2024', 'score': 9800, 'is_you': False},
+        {'name': 'DevNinja', 'score': 9200, 'is_you': False},
+        {'name': player.nombre or 'Tú', 'score': 8500 + player.skill_level * 10 + player.reputacion * 5, 'is_you': True},
+        {'name': 'CodeWarrior', 'score': 7800, 'is_you': False},
+        {'name': 'FullStackPro', 'score': 7200, 'is_you': False},
+    ]
+    ranking.sort(key=lambda x: x['score'], reverse=True)
+
+    return render_template(
+        'victory.html',
+        nivel_alcanzado=player.nivel,
+        skill_level=player.skill_level,
+        salario=player.salario,
+        años_experiencia=player.años_experiencia,
+        logros_list=player.logros,
+        logros_count=len(player.logros),
+        stack_count=len(player.stack),
+        decisiones_tomadas=len(decisiones),
+        ranking=ranking
+    )
+
+
+@main_bp.route('/game-over')
+def game_over():
+    player = load_player_from_session()
+    if not player:
+        return redirect(url_for('main.index'))
+
+    player_state = player.to_dict()
+    decisiones = player_state.get('decisiones_tomadas', [])
+
+    if player.estres > 80:
+        razon = "Burnout"
+        descripcion = "Tu nivel de estrés ha llegado a un punto crítico. Has sobrepasado tus límites físicos y mentales. Es momento de tomarte un descanso y reiniciar tu carrera con nuevas fuerzas."
+    elif player.reputacion < 10:
+        razon = "Pérdida de Reputación"
+        descripcion = "Tu reputación en la industria se ha deteriorado demasiado. Las oportunidades laborales se han reducido drásticamente."
+    else:
+        razon = "Fin de Partida"
+        descripcion = "Tu viaje en este simulador ha llegado a su fin. Gracias por jugar."
+
+    return render_template(
+        'game_over.html',
+        razon=razon,
+        descripcion=descripcion,
+        nivel_alcanzado=player.nivel,
+        skill_level=player.skill_level,
+        salario=player.salario,
+        años_experiencia=player.años_experiencia,
+        decisiones_tomadas=len(decisiones),
+        decisiones_tomadas_list=decisiones[-10:],
+        logros_count=len(player.logros),
+        stack_count=len(player.stack)
+    )
 
 
 app.register_blueprint(main_bp)

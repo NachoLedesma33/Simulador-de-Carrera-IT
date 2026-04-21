@@ -1,0 +1,387 @@
+:root {
+    --primary-color: #00d9ff;
+    --secondary-color: #0099cc;
+    --success-color: #00ff96;
+    --danger-color: #ff6b6b;
+    --warning-color: #ffc800;
+    --bg-dark: #1a1a2e;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #16213e 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.brand-icon {
+    margin-right: 0.5rem;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color) 0%, #00cc66 100%);
+    border: none;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #00cc66 0%, var(--success-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 255, 150, 0.3);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #cc4444 100%);
+    border: none;
+    font-weight: 600;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #cc4444 0%, var(--danger-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.bg-success {
+    background: var(--success-color) !important;
+}
+
+.btn-outline-light {
+    border-color: var(--border-color);
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    color: #fff;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 217, 255, 0.25);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.stat-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.stat-bar-fill.skill {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.stat-bar-fill.stress {
+    background: linear-gradient(90deg, var(--success-color), #00cc66);
+}
+
+.stat-bar-fill.stress.high {
+    background: linear-gradient(90deg, var(--danger-color), #ff3232);
+}
+
+.stat-bar-fill.reputation {
+    background: linear-gradient(90deg, #9664ff, #6b32ff);
+}
+
+.badge-custom {
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.badge-inicio { background: rgba(0, 217, 255, 0.2); color: var(--primary-color); }
+.badge-promocion { background: rgba(0, 255, 150, 0.2); color: var(--success-color); }
+.badge-riesgo { background: rgba(255, 107, 107, 0.2); color: var(--danger-color); }
+.badge-final { background: rgba(255, 200, 0, 0.2); color: var(--warning-color); }
+.badge-game_over { background: rgba(255, 50, 50, 0.3); color: #ff3232; }
+.badge-liderazgo { background: rgba(150, 100, 255, 0.2); color: #9664ff; }
+.badge-evaluacion { background: rgba(255, 255, 255, 0.1); color: #c0c0c0; }
+.badge-emprendimiento { background: rgba(255, 150, 0, 0.2); color: #ff9600; }
+
+.tech-tag {
+    display: inline-block;
+    background: rgba(0, 217, 255, 0.15);
+    color: var(--primary-color);
+    padding: 0.25rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    margin: 0.15rem;
+}
+
+.logro-tag {
+    display: inline-block;
+    background: rgba(255, 200, 0, 0.15);
+    color: var(--warning-color);
+    padding: 0.25rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    margin: 0.15rem;
+}
+
+.decision-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.decision-title {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.decision-description {
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+}
+
+.option-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.option-card:hover {
+    background: rgba(0, 217, 255, 0.1);
+    border-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.option-label {
+    font-weight: 600;
+    color: #fff;
+}
+
+.alert-burnout {
+    background: rgba(255, 50, 50, 0.15);
+    border: 1px solid rgba(255, 50, 50, 0.4);
+    color: var(--danger-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.alert-event {
+    background: rgba(255, 200, 0, 0.1);
+    border: 1px solid rgba(255, 200, 0, 0.3);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.alert-event .event-title {
+    color: var(--warning-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.victory-card {
+    background: linear-gradient(135deg, rgba(0, 255, 150, 0.1), rgba(0, 217, 255, 0.1));
+    border: 2px solid var(--success-color);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.victory-title {
+    font-size: 2.5rem;
+    color: var(--success-color);
+    margin-bottom: 1rem;
+}
+
+.gameover-card {
+    background: linear-gradient(135deg, rgba(255, 50, 50, 0.1), rgba(255, 100, 100, 0.1));
+    border: 2px solid var(--danger-color);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.gameover-title {
+    font-size: 2.5rem;
+    color: var(--danger-color);
+    margin-bottom: 1rem;
+}
+
+.flash-messages {
+    margin-bottom: 1.25rem;
+}
+
+.flash-message {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.flash-message.success {
+    background: rgba(0, 255, 150, 0.15);
+    border: 1px solid rgba(0, 255, 150, 0.3);
+    color: var(--success-color);
+}
+
+.flash-message.error {
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    color: var(--danger-color);
+}
+
+.flash-message.warning {
+    background: rgba(255, 200, 0, 0.15);
+    border: 1px solid rgba(255, 200, 0, 0.3);
+    color: var(--warning-color);
+}
+
+.flash-message.info {
+    background: rgba(0, 217, 255, 0.15);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    color: var(--primary-color);
+}
+
+footer {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.text-muted {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+a.nav-link {
+    transition: color 0.2s ease;
+}
+
+a.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+.hero-section {
+    position: relative;
+}
+
+.hero-icon {
+    font-size: 4rem;
+}
+
+.hero-image {
+    width: 150px;
+    height: 80px;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.hero-image:hover {
+    transform: scale(1.05);
+}
+
+.feature-icon-large {
+    font-size: 2.5rem;
+}
+
+.border-success {
+    border-color: var(--success-color) !important;
+}
+
+@media (max-width: 768px) {
+    .decision-title {
+        font-size: 1.25rem;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+    }
+
+    .victory-title,
+    .gameover-title {
+        font-size: 1.75rem;
+    }
+}

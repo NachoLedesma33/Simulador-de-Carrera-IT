@@ -1,0 +1,265 @@
+<div class="tech-stack-panel" id="techStackPanel">
+    {% if player.stack %}
+    <div class="card">
+        <div class="card-header">
+            <h6 class="mb-0">🛠️ Tech Stack</h6>
+        </div>
+        <div class="card-body">
+            <div class="tech-cloud" id="techCloud">
+                {% for tech in player.stack %}
+                    {% set category = get_tech_category(tech) %}
+                    <span class="tech-badge {{ category }}"
+                          data-bs-toggle="tooltip"
+                          data-bs-title="{{ tech }}"
+                          data-bs-placement="top">
+                        {{ tech }}
+                    </span>
+                {% endfor %}
+            </div>
+            <div class="tech-summary">
+                <small class="text-muted">
+                    {{ player.stack|length }} tecnología{{ 's' if player.stack|length != 1 else '' }} dominada{{ 's' if player.stack|length != 1 else '' }}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.tech-stack-panel .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.tech-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.75rem;
+    border-radius: 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: default;
+    animation: techFadeIn 0.4s ease forwards;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.tech-badge:nth-child(1) { animation-delay: 0s; }
+.tech-badge:nth-child(2) { animation-delay: 0.05s; }
+.tech-badge:nth-child(3) { animation-delay: 0.1s; }
+.tech-badge:nth-child(4) { animation-delay: 0.15s; }
+.tech-badge:nth-child(5) { animation-delay: 0.2s; }
+.tech-badge:nth-child(6) { animation-delay: 0.25s; }
+.tech-badge:nth-child(7) { animation-delay: 0.3s; }
+.tech-badge:nth-child(8) { animation-delay: 0.35s; }
+.tech-badge:nth-child(9) { animation-delay: 0.4s; }
+.tech-badge:nth-child(10) { animation-delay: 0.45s; }
+
+@keyframes techFadeIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tech-badge:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tech-badge.frontend {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 153, 204, 0.2));
+    color: #00d9ff;
+    border: 1px solid rgba(0, 217, 255, 0.3);
+}
+
+.tech-badge.frontend:hover {
+    box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+}
+
+.tech-badge.backend {
+    background: linear-gradient(135deg, rgba(0, 255, 150, 0.2), rgba(0, 204, 102, 0.2));
+    color: #00ff96;
+    border: 1px solid rgba(0, 255, 150, 0.3);
+}
+
+.tech-badge.backend:hover {
+    box-shadow: 0 4px 12px rgba(0, 255, 150, 0.3);
+}
+
+.tech-badge.database {
+    background: linear-gradient(135deg, rgba(255, 150, 0, 0.2), rgba(204, 120, 0, 0.2));
+    color: #ff9600;
+    border: 1px solid rgba(255, 150, 0, 0.3);
+}
+
+.tech-badge.database:hover {
+    box-shadow: 0 4px 12px rgba(255, 150, 0, 0.3);
+}
+
+.tech-badge.devops {
+    background: linear-gradient(135deg, rgba(150, 100, 255, 0.2), rgba(107, 50, 255, 0.2));
+    color: #9664ff;
+    border: 1px solid rgba(150, 100, 255, 0.3);
+}
+
+.tech-badge.devops:hover {
+    box-shadow: 0 4px 12px rgba(150, 100, 255, 0.3);
+}
+
+.tech-badge.mobile {
+    background: linear-gradient(135deg, rgba(255, 100, 150, 0.2), rgba(204, 50, 100, 0.2));
+    color: #ff6496;
+    border: 1px solid rgba(255, 100, 150, 0.3);
+}
+
+.tech-badge.mobile:hover {
+    box-shadow: 0 4px 12px rgba(255, 100, 150, 0.3);
+}
+
+.tech-badge.data {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 204, 204, 0.2));
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.tech-badge.data:hover {
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+}
+
+.tech-badge.default {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(200, 200, 200, 0.1));
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tech-badge.default:hover {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.tech-summary {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.tech-category-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.legend-dot.frontend { background: #00d9ff; }
+.legend-dot.backend { background: #00ff96; }
+.legend-dot.database { background: #ff9600; }
+.legend-dot.devops { background: #9664ff; }
+.legend-dot.mobile { background: #ff6496; }
+.legend-dot.data { background: #00ffff; }
+
+.tech-badge.new {
+    animation: techPopIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes techPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+</style>
+
+<script>
+const TECH_CATEGORIES = {
+    frontend: ['HTML', 'CSS', 'JavaScript', 'React', 'Vue.js', 'Angular', 'TypeScript', 'SASS', 'Tailwind', 'Bootstrap', 'jQuery', 'Next.js', 'Nuxt.js', 'D3.js', 'Three.js'],
+    backend: ['Python', 'Java', 'Node.js', 'Go', 'Rust', 'Ruby', 'PHP', 'C#', 'ASP.NET', 'Django', 'Flask', 'FastAPI', 'Express', 'Spring', 'Laravel', 'Rails', 'ASP.NET Core'],
+    database: ['SQL', 'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'SQLite', 'Oracle', 'SQL Server', 'Firebase', 'Elasticsearch', 'Cassandra', 'DynamoDB'],
+    devops: ['Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP', 'Jenkins', 'GitLab', 'GitHub Actions', 'Terraform', 'Ansible', 'CircleCI', 'Travis CI', 'Nginx', 'Apache'],
+    mobile: ['Swift', 'Kotlin', 'React Native', 'Flutter', 'iOS', 'Android', 'Xamarin', 'Ionic', 'Cordova'],
+    data: ['Pandas', 'NumPy', 'TensorFlow', 'PyTorch', 'AI/ML', 'Machine Learning', 'Data Science', 'Excel', 'PowerBI', 'Tableau', 'R', 'Spark', 'Hadoop']
+};
+
+function getTechCategory(tech) {
+    const techUpper = tech.toUpperCase();
+    for (const [category, technologies] of Object.entries(TECH_CATEGORIES)) {
+        if (technologies.some(t => t.toUpperCase() === techUpper)) {
+            return category;
+        }
+    }
+    return 'default';
+}
+
+function initTechStack() {
+    const badges = document.querySelectorAll('.tech-badge');
+    badges.forEach((badge, index) => {
+        badge.style.animationDelay = (index * 0.05) + 's';
+
+        const tech = badge.dataset.bsTitle;
+        const category = getTechCategory(tech);
+        badge.classList.add(category);
+    });
+
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+}
+
+function addTechBadge(tech) {
+    const cloud = document.getElementById('techCloud');
+    if (!cloud) return;
+
+    const category = getTechCategory(tech);
+    const badge = document.createElement('span');
+    badge.className = `tech-badge ${category} new`;
+    badge.dataset.bsToggle = 'tooltip';
+    badge.dataset.bsTitle = tech;
+    badge.dataset.bsPlacement = 'top';
+    badge.textContent = tech;
+
+    cloud.appendChild(badge);
+
+    const tooltip = new bootstrap.Tooltip(badge);
+
+    const summary = document.querySelector('.tech-summary small');
+    if (summary) {
+        const count = cloud.children.length;
+        summary.textContent = `${count} tecnología${count !== 1 ? 's' : ''} dominada${count !== 1 ? 's' : ''}`;
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTechStack);
+} else {
+    initTechStack();
+}
+</script>

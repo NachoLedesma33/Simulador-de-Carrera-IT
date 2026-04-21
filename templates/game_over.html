@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Over - Simulador Carrera IT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .container { max-width: 600px; padding: 40px; text-align: center; }
+        .gameover-icon { font-size: 6rem; margin-bottom: 20px; }
+        .gameover-title { font-size: 3rem; margin-bottom: 10px; color: #ff6b6b; }
+        .gameover-subtitle { font-size: 1.2rem; color: #a0a0a0; margin-bottom: 40px; }
+        .reason-card {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .reason-title { font-size: 1.5rem; color: #ff6b6b; margin-bottom: 15px; }
+        .reason-description { color: #c0c0c0; line-height: 1.6; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-item { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #00d9ff; }
+        .stat-label { font-size: 0.85rem; color: #a0a0a0; margin-top: 5px; }
+        .stats-section { margin-bottom: 30px; }
+        .section-title { font-size: 1.1rem; color: #a0a0a0; margin-bottom: 15px; }
+        .decisions-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .decision-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        .decision-item:last-child { border-bottom: none; }
+        .decision-number { color: #00d9ff; margin-right: 10px; }
+        .btn { display: inline-block; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; font-size: 1rem; margin: 5px; }
+        .btn-primary { background: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%); color: #1a1a2e; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3); }
+        .btn-secondary { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+        .btn-danger { background: linear-gradient(135deg, #ff6b6b 0%, #cc4444 100%); color: #fff; }
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3); }
+        .actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="gameover-icon">😴</div>
+        <h1 class="gameover-title">¡Game Over!</h1>
+        <p class="gameover-subtitle">Tu carrera ha llegado a su fin temporal</p>
+
+        <div class="reason-card">
+            <div class="reason-title">⚠️ {{ razon }}</div>
+            <p class="reason-description">{{ descripcion }}</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">{{ nivel_alcanzado|title }}</div>
+                <div class="stat-label">Nivel Alcanzado</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ decisiones_tomadas }}</div>
+                <div class="stat-label">Decisiones</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ años_experiencia }} años</div>
+                <div class="stat-label">Experiencia</div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="section-title">📊 Estadísticas Finales</h3>
+            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="stat-item">
+                    <div class="stat-value">${{ salario|format_number }}</div>
+                    <div class="stat-label">Salario Máximo</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ skill_level }}</div>
+                    <div class="stat-label">Skill Alcanzado</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ stack_count }}</div>
+                    <div class="stat-label">Tecnologías</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ logros_count }}</div>
+                    <div class="stat-label">Logros</div>
+                </div>
+            </div>
+        </div>
+
+        {% if decisiones_tomadas_list %}
+        <div class="stats-section">
+            <h3 class="section-title">📝 Decisiones Tomadas</h3>
+            <div class="decisions-list">
+                {% for decision in decisiones_tomadas_list %}
+                <div class="decision-item">
+                    <span class="decision-number">{{ loop.index }}.</span>
+                    {{ decision.option_label }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="actions">
+            <form method="POST" action="{{ url_for('main.decision_submit', decision_id='final_burnout') }}" style="display: inline;">
+                <input type="hidden" name="option_index" value="0">
+                <button type="submit" class="btn btn-danger">🔄 Reiniciar Carrera</button>
+            </form>
+            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">🏠 Volver al Inicio</a>
+        </div>
+    </div>
+</body>
+</html>
