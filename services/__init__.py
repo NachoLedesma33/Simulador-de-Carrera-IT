@@ -13,6 +13,22 @@ from .effect_applier import (
     EffectResult,
 )
 
+from .session_manager import (
+    save_player_to_session,
+    load_player_from_session,
+    clear_session,
+    update_player_in_session,
+    has_active_game,
+    get_current_decision_id,
+    set_current_decision_id,
+    migrate_session,
+    reset_player_state,
+    get_player_state_dict,
+    add_decision_to_history,
+    set_flag,
+    get_flag,
+)
+
 __all__ = [
     'apply_stat_change',
     'apply_stat_set',
@@ -26,4 +42,17 @@ __all__ = [
     'apply_effects_batch',
     'get_player_summary',
     'EffectResult',
+    'save_player_to_session',
+    'load_player_from_session',
+    'clear_session',
+    'update_player_in_session',
+    'has_active_game',
+    'get_current_decision_id',
+    'set_current_decision_id',
+    'migrate_session',
+    'reset_player_state',
+    'get_player_state_dict',
+    'add_decision_to_history',
+    'set_flag',
+    'get_flag',
 ]

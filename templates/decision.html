@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ decision.titulo }} - Simulador Carrera IT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
+        .header h1 { font-size: 1.2rem; color: #00d9ff; }
+        .stats-bar { display: flex; gap: 20px; }
+        .stat { font-size: 0.85rem; color: #a0a0a0; }
+        .stat strong { color: #fff; }
+        .decision-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
+        .decision-title { font-size: 1.8rem; margin-bottom: 15px; color: #00d9ff; }
+        .decision-description { font-size: 1.1rem; color: #c0c0c0; line-height: 1.6; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 15px; }
+        .badge.inicio { background: rgba(0,217,255,0.2); color: #00d9ff; }
+        .badge.promocion { background: rgba(0,255,150,0.2); color: #00ff96; }
+        .badge.riesgo { background: rgba(255,100,100,0.2); color: #ff6b6b; }
+        .badge.final { background: rgba(255,200,0,0.2); color: #ffc800; }
+        .badge.game_over { background: rgba(255,50,50,0.3); color: #ff3232; }
+        .badge.liderazgo { background: rgba(150,100,255,0.2); color: #9664ff; }
+        .options-list { display: flex; flex-direction: column; gap: 15px; }
+        .option-form { }
+        .option-btn { width: 100%; padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 1rem; text-align: left; cursor: pointer; transition: all 0.3s; }
+        .option-btn:hover { background: rgba(0,217,255,0.1); border-color: #00d9ff; transform: translateX(5px); }
+        .option-label { font-weight: 600; }
+        .player-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; }
+        .stat-card .label { font-size: 0.75rem; color: #a0a0a0; text-transform: uppercase; }
+        .stat-card .value { font-size: 1.5rem; font-weight: 700; margin-top: 5px; }
+        .stat-card .bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+        .stat-card .bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+        .bar-skill { background: linear-gradient(90deg, #00d9ff, #0099cc); }
+        .bar-estres { background: linear-gradient(90deg, #00ff96, #00cc66); }
+        .bar-estres.high { background: linear-gradient(90deg, #ff6b6b, #ff3232); }
+        .bar-reputacion { background: linear-gradient(90deg, #9664ff, #6b32ff); }
+        .event-card { background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.3); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        .event-title { color: #ffc800; font-weight: 600; margin-bottom: 10px; }
+        .event-description { color: #c0c0c0; }
+        .burnout-warning { background: rgba(255,50,50,0.2); border: 1px solid rgba(255,50,50,0.4); padding: 15px; border-radius: 10px; margin-bottom: 20px; color: #ff6b6b; }
+        .victory-card { background: linear-gradient(135deg, rgba(0,255,150,0.1), rgba(0,217,255,0.1)); border: 2px solid #00ff96; padding: 40px; border-radius: 16px; text-align: center; }
+        .victory-title { font-size: 2.5rem; color: #00ff96; margin-bottom: 20px; }
+        .gameover-card { background: linear-gradient(135deg, rgba(255,50,50,0.1), rgba(255,100,100,0.1)); border: 2px solid #ff3232; padding: 40px; border-radius: 16px; text-align: center; }
+        .gameover-title { font-size: 2.5rem; color: #ff6b6b; margin-bottom: 20px; }
+        .stack-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .tech-tag { background: rgba(0,217,255,0.2); color: #00d9ff; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; }
+        .logros-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .logro-tag { background: rgba(255,200,0,0.2); color: #ffc800; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; }
+        .actions { display: flex; gap: 10px; margin-top: 30px; }
+        .btn { padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%); color: #1a1a2e; }
+        .btn-danger { background: rgba(255,100,100,0.2); color: #ff6b6b; border: 1px solid rgba(255,100,100,0.3); }
+        .messages { margin-bottom: 20px; }
+        .message { padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+        .message.success { background: rgba(0,255,150,0.2); border: 1px solid rgba(0,255,150,0.3); color: #00ff96; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Simulador de Carrera IT</h1>
+            <div class="stats-bar">
+                <span class="stat">Nivel: <strong>{{ player.nivel|title }}</strong></span>
+                <span class="stat">Skill: <strong>{{ player.skill_level }}</strong></span>
+                <span class="stat">Exp: <strong>{{ "%.1f"|format(player.años_experiencia) }} años</strong></span>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <div class="message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if is_burnout_warning %}
+            <div class="burnout-warning">
+                ⚠️ ¡Alto nivel de estrés! ({{ player.estres }}%) - Corre riesgo de burnout. Considera decisiones que reduzcan tu estrés.
+            </div>
+        {% endif %}
+
+        {% if event_triggered %}
+            <div class="event-card">
+                <div class="event-title">{{ event_triggered.titulo }}</div>
+                <div class="event-description">{{ event_triggered.descripcion }}</div>
+            </div>
+        {% endif %}
+
+        <div class="player-stats">
+            <div class="stat-card">
+                <div class="label">Skill Level</div>
+                <div class="value">{{ player.skill_level }}</div>
+                <div class="bar"><div class="bar-fill bar-skill" style="width: {{ player.skill_level }}%"></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Estrés</div>
+                <div class="value">{{ player.estres }}%</div>
+                <div class="bar"><div class="bar-fill bar-estres {% if player.estres > 80 %}high{% endif %}" style="width: {{ player.estres }}%"></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Reputación</div>
+                <div class="value">{{ player.reputacion }}</div>
+                <div class="bar"><div class="bar-fill bar-reputacion" style="width: {{ player.reputacion }}%"></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Salario</div>
+                <div class="value">${{ player.salario|format_number }}</div>
+            </div>
+        </div>
+
+        {% if is_victory %}
+            <div class="victory-card">
+                <div class="victory-title">🏆 ¡Victoria!</div>
+                <p>{{ decision.descripcion }}</p>
+                <p style="margin-top: 20px; color: #c0c0c0;">Has alcanzado el éxito en tu carrera IT.</p>
+                <div class="actions">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-primary">Nueva Partida</a>
+                </div>
+            </div>
+        {% elif is_game_over %}
+            <div class="gameover-card">
+                <div class="gameover-title">😴 Burnout</div>
+                <p>{{ decision.descripcion }}</p>
+                <div class="actions">
+                    <form method="POST" action="{{ url_for('main.decision_submit', decision_id=current_decision_id) }}">
+                        <input type="hidden" name="option_index" value="0">
+                        <button type="submit" class="btn btn-danger">Reiniciar Carrera</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="decision-card">
+                <span class="badge {{ decision.tipo }}">{{ decision.titulo }}</span>
+                <h2 class="decision-title">{{ decision.titulo }}</h2>
+                <p class="decision-description">{{ decision.descripcion }}</p>
+            </div>
+
+            {% if player.stack %}
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="label">Tu Stack</div>
+                <div class="stack-list">
+                    {% for tech in player.stack %}
+                        <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if player.logros %}
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="label">Logros Desbloqueados</div>
+                <div class="logros-list">
+                    {% for logro in player.logros %}
+                        <span class="logro-tag">🏆 {{ logro }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="options-list">
+                {% for option in options %}
+                    <form method="POST" action="{{ url_for('main.decision_submit', decision_id=current_decision_id) }}" class="option-form">
+                        <input type="hidden" name="option_index" value="{{ loop.index0 }}">
+                        <button type="submit" class="option-btn">
+                            <span class="option-label">{{ option.label }}</span>
+                        </button>
+                    </form>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="actions">
+            <a href="{{ url_for('main.reset') }}" class="btn btn-danger">Reiniciar Partida</a>
+            <a href="{{ url_for('main.stats') }}" class="btn" style="background: rgba(255,255,255,0.1); color: #fff;">Ver Stats (JSON)</a>
+        </div>
+    </div>
+</body>
+</html>
