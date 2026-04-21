@@ -423,12 +423,7 @@
         }
     }
 
-    window.addEventListener('beforeunload', function(e) {
-        if (state.isLoading) {
-            e.preventDefault();
-            e.returnValue = '';
-        }
-    });
+    // Removed beforeunload event listener that interfered with form submission
 
     window.SimuladorIT = {
         showLoading: showLoadingState,

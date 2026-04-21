@@ -194,15 +194,23 @@
                                     {% if option.efectos %}
                                     <div class="option-effects">
                                         {% for efecto in option.efectos[:3] %}
-                                            <span class="effect-badge {% if efecto.delta and efecto.delta > 0 %}positive{% elif efecto.delta and efecto.delta < 0 %}negative{% endif %}">
+                                            <span class="effect-badge {% if 'delta' in efecto and efecto.delta > 0 %}positive{% elif 'delta' in efecto and efecto.delta < 0 %}negative{% endif %}">
                                                 {% if efecto.stat == 'skill_level' %}📈
                                                 {% elif efecto.stat == 'salario' %}💰
                                                 {% elif efecto.stat == 'estres' %}😰
                                                 {% elif efecto.stat == 'reputacion' %}⭐
-                                                {% elif efecto.add %}🛠️
-                                                {% elif efecto.logro %}🏆
+                                                {% elif 'add' in efecto %}🛠️
+                                                {% elif 'logro' in efecto %}🏆
                                                 {% endif %}
-                                                {% if efecto.delta % 1 == 0 %}{{ efecto.delta }}{% else %}{{ efecto.delta }}{% endif %}
+                                                {% if 'delta' in efecto %}
+                                                    {% if efecto.delta % 1 == 0 %}{{ efecto.delta|int }}{% else %}{{ efecto.delta }}{% endif %}
+                                                {% elif 'set' in efecto %}
+                                                    {{ efecto.set|title if efecto.set is string else efecto.set }}
+                                                {% elif 'add' in efecto %}
+                                                    {{ efecto.add }}
+                                                {% elif 'logro' in efecto %}
+                                                    {{ efecto.logro }}
+                                                {% endif %}
                                             </span>
                                         {% endfor %}
                                     </div>
