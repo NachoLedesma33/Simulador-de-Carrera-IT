@@ -266,8 +266,8 @@ def reset():
     return redirect(url_for('main.index'))
 
 
-@main_bp.route('/stats')
-def stats():
+@main_bp.route('/api/stats')
+def api_stats():
     player = load_player_from_session()
 
     if not player:
@@ -279,6 +279,18 @@ def stats():
     player_state['validation'] = validation
 
     return jsonify(player_state)
+
+
+@main_bp.route('/stats')
+def stats():
+    player = load_player_from_session()
+
+    if not player:
+        flash('Aún no hay ninguna estadística. Inicia una partida primero.', 'warning')
+        return redirect(url_for('main.index'))
+
+    current_decision_id = get_current_decision_id()
+    return render_template('stats_page.html', player=player, current_decision_id=current_decision_id)
 
 
 @main_bp.route('/api/check_requirements/<decision_id>')

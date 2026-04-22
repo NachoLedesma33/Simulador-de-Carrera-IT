@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Simulador de Carrera IT - Construye tu trayectoria profesional en tecnología">
     <title>{% block title %}Simulador de Carrera IT{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
     {% block extra_head %}{% endblock %}
@@ -15,7 +20,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.index') }}">
-                <span class="brand-icon">💻</span> Simulador IT
+                <i class="ph-duotone ph-terminal-window text-primary me-2 brand-icon"></i> Simulador IT
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -40,17 +45,17 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="py-3 mt-4 border-top border-secondary">
+    <footer class="py-4 mt-5 border-top" style="border-color: var(--border-color) !important;">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
                     <small class="text-muted">
-                        Simulador de Carrera IT v2.0
+                        &copy; 2026 Simulador de Carrera IT.<br class="d-md-none"> Todos los derechos reservados.
                     </small>
                 </div>
-                <div class="col-md-6 text-md-end">
+                <div class="col-md-6 text-center text-md-end">
                     <small class="text-muted">
-                        Construye tu futuro en tecnología
+                        Creado y diseñado por <strong>Nacho Ledesma</strong>
                     </small>
                 </div>
             </div>

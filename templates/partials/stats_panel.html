@@ -1,19 +1,19 @@
 <div class="stats-panel" id="statsPanel">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="mb-0">📊 Tu Progreso</h6>
+            <h6 class="mb-0"><i class="ph-duotone ph-chart-bar me-2"></i>Tu Progreso</h6>
             <span class="badge bg-primary" id="playerLevel">{{ player.nivel|title }}</span>
         </div>
         <div class="card-body">
             <div class="stat-item mb-3">
                 <div class="stat-header">
                     <span class="stat-icon">
-                        {% if player.nivel == 'trainee' %}🌱
-                        {% elif player.nivel == 'junior' %}📚
-                        {% elif player.nivel == 'semi-senior' %}💪
-                        {% elif player.nivel == 'senior' %}⭐
-                        {% elif player.nivel == 'lead' %}👑
-                        {% else %}🎯{% endif %}
+                        {% if player.nivel == 'trainee' %}<i class="ph-duotone ph-plant"></i>
+                        {% elif player.nivel == 'junior' %}<i class="ph-duotone ph-books"></i>
+                        {% elif player.nivel == 'semi-senior' %}<i class="ph-duotone ph-barbell"></i>
+                        {% elif player.nivel == 'senior' %}<i class="ph-duotone ph-star"></i>
+                        {% elif player.nivel == 'lead' %}<i class="ph-duotone ph-crown"></i>
+                        {% else %}<i class="ph-duotone ph-target"></i>{% endif %}
                     </span>
                     <span class="stat-label">Nivel</span>
                     <span class="stat-value" id="playerLevelValue">{{ player.nivel|title }}</span>
@@ -22,7 +22,7 @@
 
             <div class="stat-item mb-3">
                 <div class="stat-header">
-                    <span class="stat-icon">📈</span>
+                    <span class="stat-icon"><i class="ph-duotone ph-trend-up text-primary"></i></span>
                     <span class="stat-label">Skill Level</span>
                     <span class="stat-value" id="playerSkill">{{ player.skill_level }}</span>
                 </div>
@@ -41,7 +41,7 @@
 
             <div class="stat-item mb-3">
                 <div class="stat-header">
-                    <span class="stat-icon">💰</span>
+                    <span class="stat-icon"><i class="ph-duotone ph-currency-dollar text-success"></i></span>
                     <span class="stat-label">Salario</span>
                     <span class="stat-value text-success" id="playerSalary">${{ player.salario|format_number }}</span>
                 </div>
@@ -49,7 +49,7 @@
 
             <div class="stat-item mb-3">
                 <div class="stat-header">
-                    <span class="stat-icon">😰</span>
+                    <span class="stat-icon"><i class="ph-duotone ph-heartbeat text-danger"></i></span>
                     <span class="stat-label">Estrés</span>
                     <span class="stat-value" id="playerStress">{{ player.estres }}%</span>
                 </div>
@@ -70,7 +70,7 @@
 
             <div class="stat-item mb-3">
                 <div class="stat-header">
-                    <span class="stat-icon">⭐</span>
+                    <span class="stat-icon"><i class="ph-duotone ph-star text-warning"></i></span>
                     <span class="stat-label">Reputación</span>
                     <span class="stat-value" id="playerRep">{{ player.reputacion }}</span>
                 </div>
@@ -85,7 +85,7 @@
 
             <div class="stat-item">
                 <div class="stat-header">
-                    <span class="stat-icon">📅</span>
+                    <span class="stat-icon"><i class="ph-duotone ph-calendar text-info"></i></span>
                     <span class="stat-label">Experiencia</span>
                     <span class="stat-value" id="playerExp">{{ "%.1f"|format(player.años_experiencia) }} años</span>
                 </div>
@@ -222,7 +222,7 @@
         const indicator = document.querySelector('.update-indicator');
         if (indicator) indicator.classList.add('active');
 
-        fetch('/stats')
+        fetch('/api/stats')
             .then(response => response.json())
             .then(data => {
                 if (data.error) return;
@@ -284,7 +284,7 @@
         if (!warning) {
             const alert = document.createElement('div');
             alert.className = 'alert-burnout animate-slide-down';
-            alert.innerHTML = '⚠️ <strong>¡Alto nivel de estrés!</strong> - Riesgo de burnout.';
+            alert.innerHTML = '<i class="ph-duotone ph-warning text-warning me-2"></i> <strong>¡Alto nivel de estrés!</strong> - Riesgo de burnout.';
             const container = document.querySelector('.flash-messages') || document.querySelector('.main-content');
             if (container) {
                 container.insertBefore(alert, container.firstChild);

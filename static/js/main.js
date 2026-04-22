@@ -146,11 +146,11 @@
                         </div>
                         <div class="modal-body">
                             <div class="d-grid gap-2">
-                                <a href="/" class="btn btn-outline-light">🏠 Ir al Inicio</a>
-                                <a href="/stats" class="btn btn-outline-light">📊 Ver Estadísticas</a>
-                                <button onclick="window.location.reload()" class="btn btn-outline-light">🔄 Recargar Página</button>
+                                <a href="/" class="btn btn-outline-light"><i class="ph-bold ph-house" style="margin-right: 6px;"></i> Ir al Inicio</a>
+                                <a href="/stats" class="btn btn-outline-light"><i class="ph-bold ph-chart-bar" style="margin-right: 6px;"></i> Ver Estadísticas</a>
+                                <button onclick="window.location.reload()" class="btn btn-outline-light"><i class="ph-bold ph-arrows-clockwise" style="margin-right: 6px;"></i> Recargar Página</button>
                                 <hr style="border-color: var(--border-color);">
-                                <a href="/reset" class="btn btn-danger">🗑️ Reiniciar Partida</a>
+                                <a href="/reset" class="btn btn-danger"><i class="ph-bold ph-trash" style="margin-right: 6px;"></i> Reiniciar Partida</a>
                             </div>
                         </div>
                         <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
@@ -213,7 +213,7 @@
         }
 
         function updateStats() {
-            fetch('/stats')
+            fetch('/api/stats')
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -430,7 +430,7 @@
         hideLoading: hideLoadingState,
         navigateOptions: navigateOptions,
         refreshStats: function() {
-            fetch('/stats').then(r => r.json()).then(updateStatsUI);
+            fetch('/api/stats').then(r => r.json()).then(updateStatsUI);
         },
         getState: function() {
             return { ...state };

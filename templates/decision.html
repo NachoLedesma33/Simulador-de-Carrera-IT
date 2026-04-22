@@ -8,7 +8,7 @@
         <aside class="sidebar">
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">📊 Tu Progreso</h6>
+                    <h6 class="mb-0"><i class="ph-duotone ph-chart-bar me-2"></i>Tu Progreso</h6>
                     <span class="badge bg-primary">{{ player.nivel|title }}</span>
                 </div>
                 <div class="card-body">
@@ -82,7 +82,7 @@
             {% if player.stack %}
             <div class="card mb-3">
                 <div class="card-header">
-                    <h6 class="mb-0">🛠️ Tech Stack</h6>
+                    <h6 class="mb-0"><i class="ph-duotone ph-wrench me-2"></i>Tech Stack</h6>
                 </div>
                 <div class="card-body">
                     <div class="tech-cloud">
@@ -97,13 +97,13 @@
             {% if player.logros %}
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0">🏆 Logros</h6>
+                    <h6 class="mb-0"><i class="ph-duotone ph-trophy me-2"></i>Logros</h6>
                 </div>
                 <div class="card-body">
                     <div class="achievements-list">
                         {% for logro in player.logros %}
                             <div class="achievement-item">
-                                <span class="achievement-icon">🏆</span>
+                                <i class="ph-duotone ph-trophy text-warning me-2"></i>
                                 <span>{{ logro }}</span>
                             </div>
                         {% endfor %}
@@ -126,13 +126,13 @@
 
             {% if is_burnout_warning %}
                 <div class="alert-burnout animate-slide-down">
-                    ⚠️ <strong>¡Alto nivel de estrés!</strong> ({{ player.estres }}%) - Riesgo de burnout.
+                    <i class="ph-duotone ph-warning text-warning me-2"></i> <strong>¡Alto nivel de estrés!</strong> ({{ player.estres }}%) - Riesgo de burnout.
                 </div>
             {% endif %}
 
             {% if event_triggered %}
                 <div class="alert-event animate-slide-down">
-                    <div class="event-title">⚡ {{ event_triggered.titulo }}</div>
+                    <div class="event-title"><i class="ph-duotone ph-lightning text-warning me-2"></i>{{ event_triggered.titulo }}</div>
                     <div class="event-description">{{ event_triggered.descripcion }}</div>
                 </div>
             {% endif %}
@@ -145,7 +145,7 @@
 
             {% if is_victory %}
                 <div class="victory-card animate-scale-in">
-                    <div class="victory-icon">🏆</div>
+                    <div class="victory-icon"><i class="ph-duotone ph-trophy text-warning"></i></div>
                     <div class="victory-title">¡Victoria!</div>
                     <p>{{ decision.descripcion }}</p>
                     <div class="victory-stats">
@@ -168,7 +168,7 @@
                 </div>
             {% elif is_game_over %}
                 <div class="gameover-card animate-scale-in">
-                    <div class="gameover-icon">😴</div>
+                    <div class="gameover-icon"><i class="ph-duotone ph-bed text-primary"></i></div>
                     <div class="gameover-title">Burnout</div>
                     <p>{{ decision.descripcion }}</p>
                     <p class="text-muted">Has sobrepasado tus límites. Es hora de descansar y comenzar de nuevo.</p>
@@ -195,12 +195,12 @@
                                     <div class="option-effects">
                                         {% for efecto in option.efectos[:3] %}
                                             <span class="effect-badge {% if 'delta' in efecto and efecto.delta > 0 %}positive{% elif 'delta' in efecto and efecto.delta < 0 %}negative{% endif %}">
-                                                {% if efecto.stat == 'skill_level' %}📈
-                                                {% elif efecto.stat == 'salario' %}💰
-                                                {% elif efecto.stat == 'estres' %}😰
-                                                {% elif efecto.stat == 'reputacion' %}⭐
-                                                {% elif 'add' in efecto %}🛠️
-                                                {% elif 'logro' in efecto %}🏆
+                                                {% if efecto.stat == 'skill_level' %}<i class="ph-duotone ph-trend-up"></i>
+                                                {% elif efecto.stat == 'salario' %}<i class="ph-duotone ph-currency-dollar"></i>
+                                                {% elif efecto.stat == 'estres' %}<i class="ph-duotone ph-heartbeat"></i>
+                                                {% elif efecto.stat == 'reputacion' %}<i class="ph-duotone ph-star"></i>
+                                                {% elif 'add' in efecto %}<i class="ph-duotone ph-wrench"></i>
+                                                {% elif 'logro' in efecto %}<i class="ph-duotone ph-trophy"></i>
                                                 {% endif %}
                                                 {% if 'delta' in efecto %}
                                                     {% if efecto.delta % 1 == 0 %}{{ efecto.delta|int }}{% else %}{{ efecto.delta }}{% endif %}
@@ -216,7 +216,7 @@
                                     </div>
                                     {% endif %}
                                 </div>
-                                <span class="option-arrow">→</span>
+                                <span class="option-arrow"><i class="ph ph-arrow-right"></i></span>
                             </button>
                         </form>
                     {% endfor %}
@@ -225,7 +225,7 @@
 
             <div class="action-buttons">
                 <a href="{{ url_for('main.reset') }}" class="btn btn-outline-danger btn-sm">
-                    🗑️ Reiniciar
+                    <i class="ph-duotone ph-trash me-2"></i> Reiniciar
                 </a>
             </div>
         </main>

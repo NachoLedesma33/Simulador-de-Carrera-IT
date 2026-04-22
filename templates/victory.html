@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Victoria! - Simulador Carrera IT</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a10 0%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -31,7 +36,7 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
         }
-        .victory-title { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(135deg, #00ff96, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .victory-title { font-family: 'Outfit', sans-serif; font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(135deg, #00ff9d, #00e0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .victory-subtitle { font-size: 1.2rem; color: #a0a0a0; margin-bottom: 40px; }
         .trophy-display { font-size: 8rem; margin: 20px 0; animation: glow 2s ease-in-out infinite; }
         @keyframes glow {
@@ -120,11 +125,11 @@
     <canvas id="confetti-canvas"></canvas>
 
     <div class="container">
-        <div class="victory-icon">🎉</div>
+        <div class="victory-icon"><i class="ph-duotone ph-confetti" style="color: #00e0ff;"></i></div>
         <h1 class="victory-title">¡VICTORIA!</h1>
         <p class="victory-subtitle">Has alcanzado el éxito en tu carrera IT</p>
 
-        <div class="trophy-display">🏆</div>
+        <div class="trophy-display"><i class="ph-duotone ph-trophy" style="color: #ffb703;"></i></div>
 
         <div class="final-stats">
             <div class="stat-card">
@@ -147,11 +152,11 @@
 
         {% if logros_list %}
         <div class="achievements-section">
-            <h3 class="section-title">🏆 Logros Desbloqueados</h3>
+            <h3 class="section-title"><i class="ph-fill ph-trophy me-2" style="color: #ffb703;"></i> Logros Desbloqueados</h3>
             <div class="achievements-grid">
                 {% for logro in logros_list %}
                 <div class="achievement-badge">
-                    <span>🏆</span>
+                    <i class="ph-duotone ph-medal" style="color: #ffb703;"></i>
                     <span>{{ logro }}</span>
                 </div>
                 {% endfor %}
@@ -160,7 +165,7 @@
         {% endif %}
 
         <div class="ranking-section">
-            <h3 class="section-title">📊 Clasificación Simulada</h3>
+            <h3 class="section-title"><i class="ph-duotone ph-list-numbers me-2" style="color: #00e0ff;"></i> Clasificación Simulada</h3>
             <div class="ranking-card">
                 {% for entry in ranking %}
                 <div class="ranking-item {% if entry.is_you %}ranking-you{% endif %}">
@@ -168,7 +173,7 @@
                         {{ loop.index }}
                     </div>
                     <div class="ranking-name">
-                        {% if entry.is_you %}👤 {% endif %}{{ entry.name }}
+                        {% if entry.is_you %}<i class="ph-fill ph-user-circle" style="color: #00e0ff;"></i> {% endif %}{{ entry.name }}
                     </div>
                     <div class="ranking-score">{{ entry.score }}</div>
                 </div>
@@ -178,13 +183,13 @@
 
         <div class="actions">
             <button class="btn btn-share" onclick="compartirResultado()">
-                📤 Compartir Resultado
+                <i class="ph-bold ph-share-network" style="margin-right: 8px;"></i> Compartir Resultado
             </button>
             <a href="{{ url_for('main.index') }}" class="btn btn-primary">
-                🎮 Nueva Partida
+                <i class="ph-bold ph-game-controller" style="margin-right: 8px;"></i> Nueva Partida
             </a>
             <a href="{{ url_for('main.reset') }}" class="btn btn-secondary">
-                🔄 Reiniciar
+                <i class="ph-bold ph-arrow-counter-clockwise" style="margin-right: 8px;"></i> Reiniciar
             </a>
         </div>
     </div>
