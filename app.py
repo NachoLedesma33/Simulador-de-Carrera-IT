@@ -1,4 +1,5 @@
 from flask import Flask, render_template, session, Blueprint, request, redirect, url_for, jsonify, flash
+import os
 from flask_session import Session
 from config import SECRET_KEY, SESSION_TYPE, SESSION_PERMANENT, PERMANENT_SESSION_LIFETIME
 from models import Player, DecisionEngine
@@ -707,4 +708,5 @@ app.register_blueprint(main_bp)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
